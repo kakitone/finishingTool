@@ -527,12 +527,38 @@ def extractEdgeSet(folderName, mummerLink):
         if leftConnect[i] == -1:
             startList.append(i)
     
+    print "startList", startList
+    checkLoopList = [False for i in range(len(leftConnect))]
+        
+    for eachitem in startList:
+        tmp = eachitem
+        checkLoopList[tmp] = True
+        while rightConnect[tmp] != -1:
+            tmp = rightConnect[tmp]
+            if tmp != -1:
+                checkLoopList[tmp] = True
+    
+    for dumdumi in range(len(leftConnect)):
+        if checkLoopList[dumdumi] == False:
+            startList.append(dumdumi)
+            tmp = dumdumi
+            
+            while checkLoopList[tmp] == False :
+                if tmp != -1:
+                    checkLoopList[tmp] = True
+                    
+                tmp = rightConnect[tmp]
+
+    
+    
+    
     contigList = []
     print "startList", startList
     for eachitem in startList:
         tmp = eachitem
         myList = [tmp]
-        while rightConnect[tmp] != -1:
+        mystart = tmp
+        while rightConnect[tmp] != -1 and rightConnect[tmp]!=mystart:
             tmp = rightConnect[tmp]
             if tmp != -1:
                 myList.append(tmp)
@@ -756,17 +782,39 @@ def greedyAlg(mummerLink, folderName):
             rightConnect[prefixContig] = suffixContig
     
     startList= []
-    print leftConnect
+    print "leftConnect", leftConnect
     for i in range(len(leftConnect)):
         if leftConnect[i] == -1:
             startList.append(i)
     
+    print "startList", startList
+    checkLoopList = [False for i in range(len(leftConnect))]
+        
+    for eachitem in startList:
+        tmp = eachitem
+        checkLoopList[tmp] = True
+        while rightConnect[tmp] != -1:
+            tmp = rightConnect[tmp]
+            if tmp != -1:
+                checkLoopList[tmp] = True
+    
+    for dumdumi in range(len(leftConnect)):
+        if checkLoopList[dumdumi] == False:
+            startList.append(dumdumi)
+            tmp = dumdumi
+            
+            while checkLoopList[tmp] == False :
+                if tmp != -1:
+                    checkLoopList[tmp] = True         
+                tmp = rightConnect[tmp]
+
     contigList = []
-    print startList
+    print "startList", startList
     for eachitem in startList:
         tmp = eachitem
         myList = [tmp]
-        while rightConnect[tmp] != -1:
+        mystart = tmp
+        while rightConnect[tmp] != -1 and rightConnect[tmp]!=mystart:
             tmp = rightConnect[tmp]
             if tmp != -1:
                 myList.append(tmp)
