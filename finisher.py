@@ -244,12 +244,12 @@ def formRelatedReadsFile(folderName,mummerLink):
         else:
             indexOfMum = str(dummyI)
         
-        command =mummerLink +"nucmer --maxmatch --nosimplify -p "+folderName+"out "+ folderName+ "improvedTrunc.fasta raw_reads.part-"+indexOfMum+".fasta"
-        os.system(command)
-        
-
-        command  = mummerLink +"show-coords -r "+folderName+"out.delta > "+folderName+"fromMum"+indexOfMum
-        os.system(command)
+        if True:
+            command =mummerLink +"nucmer --maxmatch --nosimplify -p "+folderName+"out "+ folderName+ "improvedTrunc.fasta raw_reads.part-"+indexOfMum+".fasta"
+            os.system(command)
+    
+            command  = mummerLink +"show-coords -r "+folderName+"out.delta > "+folderName+"fromMum"+indexOfMum
+            os.system(command)
         
         f = open(folderName + "fromMum"+indexOfMum, 'r')
 
@@ -359,9 +359,9 @@ def extractEdgeSet(folderName, mummerLink):
     print "numberOfContig", numberOfContig
 
     f.close()
-    K = 200
+    K = 400
     
-    thres = 7
+    thres = 5
     # Nodes are contigs, 
     nodes = [i for i in range(numberOfContig)]
     dataSet = []
@@ -412,13 +412,13 @@ def extractEdgeSet(folderName, mummerLink):
         else:
             indexOfMum = str(dummyI)
 
-
-        command =mummerLink +"nucmer --maxmatch --simplify -p "+folderName+"outRefine "+ folderName+ "smaller_improvedContig.fasta "+ "relatedReads_Double.part-"+indexOfMum+".fasta"
-        os.system(command)
-        
-        command  = mummerLink +"show-coords -r "+folderName+"outRefine.delta > "+folderName+"fromMumRefine"+indexOfMum
-        os.system(command)
-        
+        if True:
+            command =mummerLink +"nucmer --maxmatch --simplify -p "+folderName+"outRefine "+ folderName+ "smaller_improvedContig.fasta "+ "relatedReads_Double.part-"+indexOfMum+".fasta"
+            os.system(command)
+            
+            command  = mummerLink +"show-coords -r "+folderName+"outRefine.delta > "+folderName+"fromMumRefine"+indexOfMum
+            os.system(command)
+            
         f = open(folderName + "fromMumRefine"+indexOfMum, 'r')
         for i in range(6):
             tmp = f.readline()
@@ -431,7 +431,7 @@ def extractEdgeSet(folderName, mummerLink):
             matchLenArr = info[2].split()
            
         
-            matchLen = int(matchLenArr[0])    
+            matchLen = int(matchLenArr[1])    
             contigStart, contigEnd =  int( firstArr[0]), int( firstArr[1])
             readStart, readEnd =  int(filterArr[0]) , int(filterArr[1])
             
@@ -475,56 +475,62 @@ def extractEdgeSet(folderName, mummerLink):
             else:
                 contigNum = int(myArr[0][6:])*2 +1
             
-            print "matchLen", subitem[3]
             if subitem[2] == 'L':
                 left.append([contigNum, subitem[3]])
             else:
                 right.append([contigNum, subitem[3]])
-                
-        print "left, right", left, right
-        #if len(set(left).intersection(set(right))) == 0 and len(set(left))== len(left) and len(set(right)) == len(right):
-        #if  len(set(left))== len(left) and len(set(right)) == len(right
-            
+
         for eachleft in left:
             for eachright in right:
                 leftIndex , rightIndex = eachleft[0], eachright[0]
                 leftLen, rightLen = eachleft[1], eachright[1]
                 
                 if leftIndex != rightIndex:
-                    matchPair.append([rightIndex, leftIndex, min(leftLen,rightLen)])
+                    matchPair.append([rightIndex, leftIndex, min(leftLen,rightLen),  rightLen,leftLen, key])
 
     matchPair.sort()
         
     keyFound = []
     bestMatchPair = []
+    rawReadList = []
+    
     for key, items in groupby(matchPair, itemgetter(0,1)):
         maxvalue = -1
+        maxLenPair = []
         for eachitem in items:
             if eachitem[2] > maxvalue:
                 maxvalue = eachitem[2]
-        bestMatchPair.append([key[0], key[1], maxvalue])
+                maxLenPair = [eachitem[3], eachitem[4], eachitem[5]]
+        bestMatchPair.append([key[0], key[1], maxvalue, maxLenPair[0], maxLenPair[1], maxLenPair[2]])
     
     bestMatchPair.sort( key=lambda tup: tup[2], reverse=True)
     
     print "bestMatchPair", bestMatchPair
 
 
-    leftConnect = [-1 for i in range(numberOfContig)]
-    rightConnect = [-1 for i in range(numberOfContig)]
+    leftConnect = [[-1,-1,-1] for i in range(numberOfContig)]
+    rightConnect = [[-1,-1,-1] for i in range(numberOfContig)]
     
     for eachitem in bestMatchPair:
 
         prefixContig = eachitem[0]
         suffixContig = eachitem[1]
         
-        if leftConnect[suffixContig] == -1 and rightConnect[prefixContig] == -1:
-            leftConnect[suffixContig] = prefixContig 
-            rightConnect[prefixContig] = suffixContig
+        if leftConnect[suffixContig][0] == -1 and rightConnect[prefixContig][0] == -1:
+            leftConnect[suffixContig][0] = prefixContig 
+            leftConnect[suffixContig][1] =  eachitem[4]
+            leftConnect[suffixContig][2] =  eachitem[5]
+            
+            rightConnect[prefixContig][0] = suffixContig
+            rightConnect[prefixContig][1] = eachitem[3]
+            rightConnect[prefixContig][2] = eachitem[5]
+            
+            rawReadList.append(eachitem[5])
     
     startList= []
     print "leftConnect", leftConnect
     for i in range(len(leftConnect)):
-        if leftConnect[i] == -1:
+        if leftConnect[i][0] == -1:
             startList.append(i)
     
     print "startList", startList
@@ -533,8 +539,8 @@ def extractEdgeSet(folderName, mummerLink):
     for eachitem in startList:
         tmp = eachitem
         checkLoopList[tmp] = True
-        while rightConnect[tmp] != -1:
-            tmp = rightConnect[tmp]
+        while rightConnect[tmp][0] != -1:
+            tmp = rightConnect[tmp][0]
             if tmp != -1:
                 checkLoopList[tmp] = True
     
@@ -547,19 +553,17 @@ def extractEdgeSet(folderName, mummerLink):
                 if tmp != -1:
                     checkLoopList[tmp] = True
                     
-                tmp = rightConnect[tmp]
+                tmp = rightConnect[tmp][0]
 
-    
-    
-    
+
     contigList = []
     print "startList", startList
     for eachitem in startList:
         tmp = eachitem
         myList = [tmp]
         mystart = tmp
-        while rightConnect[tmp] != -1 and rightConnect[tmp]!=mystart:
-            tmp = rightConnect[tmp]
+        while rightConnect[tmp][0] != -1 and rightConnect[tmp][0]!=mystart:
+            tmp = rightConnect[tmp][0]
             if tmp != -1:
                 myList.append(tmp)
         contigList.append(myList)
@@ -582,6 +586,40 @@ def extractEdgeSet(folderName, mummerLink):
             
         tmp = fOriginal.readline().rstrip()
     readSet.append(tmpRead)  
+    fOriginal.close()
+    
+    ### Put the needed rawReads into the RAM using Dictionary
+    #rawReadList
+    fAppendRaw = open(folderName+ "appendRaw.txt", 'w')
+    for eachraw in rawReadList:
+        fAppendRaw.write(eachraw)
+        fAppendRaw.write('\n')
+    fAppendRaw.close()
+    
+    command = "perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' "+folderName+"appendRaw.txt "+folderName+"relatedReads_Double.fasta > "+folderName+"rawToAppend.fasta"
+    os.system(command)
+    
+    rawRead = {}
+    
+    fOriginal = open(folderName + "rawToAppend.fasta", 'r')
+    tmp = fOriginal.readline().rstrip()
+    tmpRead = ""
+    tmpName = ""
+    while len(tmp) > 0:
+        if tmp[0] == '>':
+            
+            if len(tmpRead) >0:
+                rawRead[tmpName]=tmpRead
+                tmpRead = ""
+                
+            tmpName = tmp[1:]
+        else:
+            tmpRead = tmpRead+ tmp
+            
+        tmp = fOriginal.readline().rstrip()
+        
+    rawRead[tmpName]=tmpRead
+    ### End
     
     seqToPrint = []
     contigUsed = [False for i in range(numberOfContig/2)]
@@ -601,16 +639,48 @@ def extractEdgeSet(folderName, mummerLink):
         
     
     fImproved = open(folderName +"improved2.fasta", 'w')
+    
     for eachcontig, dummyIndex in zip(finalList, range(len(finalList))):
         fImproved.write(">Segkk"+str(dummyIndex)+'\n')
-        for eachseg in eachcontig:
+        tmpStore = -1997
+        tmpStore2 = -1998
+        tmpStore3 = -1999
+        
+        for eachseg, hidum in zip(eachcontig, range(len(eachcontig))):
             readNum = eachseg/2
             orientation = eachseg%2
-
-            if orientation == 0:
-                fImproved.write(readSet[readNum])
+            
+            newStart = 0 
+            
+            x , y , l= tmpStore,leftConnect[eachseg][1],tmpStore2
+            extraRead = ""
+            if hidum ==0:
+                newStart = 0
             else:
-                fImproved.write(reverseComplement(readSet[readNum]))
+                
+                if l <x+y:
+                    newStart = x+y-l
+                else:
+                    newStart = 0
+                    extraRead = tmpStore3[x:l-y]
+                    
+                    
+            
+            print extraRead[0:10], len(extraRead)
+            fImproved.write(extraRead)
+            
+            if orientation == 0:
+                fImproved.write(readSet[readNum][newStart:])   
+
+            else:
+                fImproved.write(reverseComplement(readSet[readNum])[newStart:])
+
+            
+            if rightConnect[eachseg][1] != -1:
+                tmpStore = rightConnect[eachseg][1]
+                tmpStore2 = len(rawRead[rightConnect[eachseg][2]])
+                tmpStore3 = rawRead[rightConnect[eachseg][2]]
+                
         fImproved.write('\n')
         
     fImproved.close()
@@ -711,11 +781,12 @@ def greedyAlg(mummerLink, folderName):
     fSmaller.close()
     fmyFile.close()
     
-    command =mummerLink +"nucmer --maxmatch --nosimplify -p "+folderName+"greedy "+ folderName+ "smaller_contigs_Double.fasta "+ folderName+ "smaller_contigs_Double.fasta"
-    os.system(command)
-    
-    command  = mummerLink +"show-coords -r "+folderName+"greedy.delta > "+folderName+"fromMumGreedy"
-    os.system(command)
+    if True:
+        command =mummerLink +"nucmer --maxmatch --nosimplify -p "+folderName+"greedy "+ folderName+ "smaller_contigs_Double.fasta "+ folderName+ "smaller_contigs_Double.fasta"
+        os.system(command)
+        
+        command  = mummerLink +"show-coords -r "+folderName+"greedy.delta > "+folderName+"fromMumGreedy"
+        os.system(command)
         
     lengthDic = findContigLength(folderName, "contigs")
     
@@ -759,12 +830,15 @@ def greedyAlg(mummerLink, folderName):
     print "dataSet:", dataSet[0]
     numberOfContig = len(lengthDic)
     
-    leftConnect = [-1 for i in range(numberOfContig)]
-    rightConnect = [-1 for i in range(numberOfContig)]
+    # [next_item, overlap_length]
+    
+    leftConnect = [[-1,-1] for i in range(numberOfContig)]
+    rightConnect = [[-1,-1] for i in range(numberOfContig)]
     
     for eachitem in dataSet:
         prefix = eachitem[1].split('_')
         suffix = eachitem[2].split('_')
+        lengthOfOverlap = int(eachitem[0])
         
         if prefix[1] == 'p':
             prefixContig = int(prefix[0][6:])*2 
@@ -777,14 +851,16 @@ def greedyAlg(mummerLink, folderName):
             suffixContig = int(suffix[0][6:])*2 +1
             
         
-        if leftConnect[suffixContig] == -1 and rightConnect[prefixContig] == -1:
-            leftConnect[suffixContig] = prefixContig 
-            rightConnect[prefixContig] = suffixContig
-    
+        if leftConnect[suffixContig][0] == -1 and rightConnect[prefixContig][0] == -1:
+            leftConnect[suffixContig][0] = prefixContig 
+            leftConnect[suffixContig][1] = lengthOfOverlap
+            rightConnect[prefixContig][0] = suffixContig
+            rightConnect[prefixContig][1] = lengthOfOverlap
+            
     startList= []
     print "leftConnect", leftConnect
     for i in range(len(leftConnect)):
-        if leftConnect[i] == -1:
+        if leftConnect[i][0] == -1:
             startList.append(i)
     
     print "startList", startList
@@ -793,8 +869,8 @@ def greedyAlg(mummerLink, folderName):
     for eachitem in startList:
         tmp = eachitem
         checkLoopList[tmp] = True
-        while rightConnect[tmp] != -1:
-            tmp = rightConnect[tmp]
+        while rightConnect[tmp][0] != -1:
+            tmp = rightConnect[tmp][0]
             if tmp != -1:
                 checkLoopList[tmp] = True
     
@@ -806,7 +882,7 @@ def greedyAlg(mummerLink, folderName):
             while checkLoopList[tmp] == False :
                 if tmp != -1:
                     checkLoopList[tmp] = True         
-                tmp = rightConnect[tmp]
+                tmp = rightConnect[tmp][0]
 
     contigList = []
     print "startList", startList
@@ -814,8 +890,8 @@ def greedyAlg(mummerLink, folderName):
         tmp = eachitem
         myList = [tmp]
         mystart = tmp
-        while rightConnect[tmp] != -1 and rightConnect[tmp]!=mystart:
-            tmp = rightConnect[tmp]
+        while rightConnect[tmp][0] != -1 and rightConnect[tmp][0]!=mystart:
+            tmp = rightConnect[tmp][0]
             if tmp != -1:
                 myList.append(tmp)
         contigList.append(myList)
@@ -859,11 +935,16 @@ def greedyAlg(mummerLink, folderName):
         for eachseg in eachcontig:
             readNum = eachseg/2
             orientation = eachseg%2
-
-            if orientation == 0:
-                fImproved.write(readSet[readNum])
+            overlapLength =  rightConnect[eachseg][1]
+            if overlapLength == -1:
+                endPt = len(readSet[readNum])
             else:
-                fImproved.write(reverseComplement(readSet[readNum]))
+                endPt = len(readSet[readNum]) - overlapLength
+                
+            if orientation == 0:
+                fImproved.write(readSet[readNum][0:endPt])
+            else:
+                fImproved.write(reverseComplement(readSet[readNum])[0:endPt])
         fImproved.write('\n')
         
     fImproved.close()
