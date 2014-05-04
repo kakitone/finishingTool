@@ -20,4 +20,4 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 	b) the whole new set of contigs against the reference. 
 	c) the whole original set of contigs against the reference. 
 4. Remark : after passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs in improved2.fasta
-
+5. Remark2 : if you have problem running scipy.weave, try to remove ~/.python27_compiled 
