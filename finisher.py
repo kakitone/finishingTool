@@ -559,7 +559,7 @@ def formRelatedReadsFile(folderName,mummerLink):
             os.system(command)
         
         f = open(folderName + "fromMum"+indexOfMum, 'r')
-        # 
+    
         for i in range(6):
             tmp = f.readline()
         
@@ -641,7 +641,7 @@ def formRelatedReadsFile(folderName,mummerLink):
     os.system(command)
     
 
-def extractEdgeSet(folderName, mummerLink):
+def extractEdgeSet(folderName, mummerLink, option= "nopolish"):
     # Tasks: reconstruct the string  graph
     
     # Input : relatedReads_Double.fasta, conig_Double.fasta
@@ -969,8 +969,10 @@ def extractEdgeSet(folderName, mummerLink):
                     newStart = x+y-l
                 else:
                     newStart = 0
-                    extraRead = performPolishing(leftConnect[eachseg][0], eachseg, tmpStore3[x:l-y],  dataSet, folderName)
-                    #extraRead = tmpStore3[x:l-y]
+                    if option == 'polish':
+                        extraRead = performPolishing(leftConnect[eachseg][0], eachseg, tmpStore3[x:l-y],  dataSet, folderName)
+                    else:
+                        extraRead = tmpStore3[x:l-y]
                     
     
             print extraRead[0:10], len(extraRead)
@@ -1173,10 +1175,10 @@ def covertAlphToInt(mySegmentIn):
             mySegment.append(4)
     return mySegment
 
-def newGraphPipeLine(folderName, mummerLink):
+def newGraphPipeLine(folderName, mummerLink,option):
     print "newGraphPipeLine"
     formRelatedReadsFile(folderName,mummerLink)
-    extractEdgeSet(folderName, mummerLink)
+    extractEdgeSet(folderName, mummerLink, option)
     
     
 def greedyAlg(mummerLink, folderName):
@@ -1385,10 +1387,11 @@ def greedyAlg(mummerLink, folderName):
         
     fImproved.close()
     
-def mainFlow(folderName,mummerLink ):
+def mainFlow(folderName,mummerLink,option):
     greedyAlg(mummerLink, folderName)
-    newGraphPipeLine(folderName, mummerLink)
-
+    newGraphPipeLine(folderName, mummerLink, option)
+    
+    
     os.system("cp raw_reads.* "+ folderName)
     os.system("rm raw_reads.*")
     
@@ -1403,6 +1406,10 @@ print 'Argument List:', str(sys.argv)
 folderName = sys.argv[1]
 mummerLink = sys.argv[2]
 
+option = "nopolish"
+if len(sys.argv) > 3:
+    if sys.argv[3] == "polish" :
+        option =  "polish"
 
-mainFlow(folderName,mummerLink)
+mainFlow(folderName,mummerLink, option)
 print  "Time",  time.time() - t0
