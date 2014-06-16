@@ -5,12 +5,10 @@ finshingTool
 
 
 This is the command to do this post processing
-Inline:
 
 	python finisher.py destinedFolder mummerPath
 
 To run a repeat aware version:
-Inline:
 
 	python finisherSC.py destinedFolder mummerPath
 
