@@ -5,7 +5,6 @@ finshingTool
 
 
 This is the command to do this post processing
-
 Inline:
 
 	python finisher.py destinedFolder mummerPath
