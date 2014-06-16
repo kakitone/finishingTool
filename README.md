@@ -29,6 +29,8 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 ## Remarks ##
 1. After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs in improved2.fasta
 2. If you have problem running scipy.weave, try to remove ~/.python27_compiled 
-3. If you want polishing to be done for the gaps, you can add polish at the end as follows:
+3. If you want polishing to be done for the gaps in the greedy mode, you can add polish at the end as follows:
 	
 	python finisher.py EcoliTestRun/ MUMmer3.23/ polish
+
+4. If you want to have a more aggressive output in the repeat aware mode, you can just use the improved3.fasta in your destinedFolder. It is already ouputted there after you run finisherSC.py 
