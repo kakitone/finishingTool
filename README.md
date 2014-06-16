@@ -26,8 +26,9 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 	c) the whole original set of contigs against the reference. 
 
 
-## Remark ##
-Remark : after passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs in improved2.fasta
-Remark2 : if you have problem running scipy.weave, try to remove ~/.python27_compiled 
-Remark3 : if you want polishing to be done for the gaps, you can add polish at the end as follows:
-             python finisher.py EcoliTestRun/ MUMmer3.23/ polish
+## Remarks ##
+1. After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs in improved2.fasta
+2. If you have problem running scipy.weave, try to remove ~/.python27_compiled 
+3. If you want polishing to be done for the gaps, you can add polish at the end as follows:
+	
+	python finisher.py EcoliTestRun/ MUMmer3.23/ polish
