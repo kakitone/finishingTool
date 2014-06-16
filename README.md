@@ -7,11 +7,11 @@ finshingTool
 This is the command to do this post processing
 
 Inline:
-python finisher.py destinedFolder mummerPath
+	python finisher.py destinedFolder mummerPath
 
 To run a repeat aware version:
 Inline:
-python finisherSC.py destinedFolder mummerPath
+	python finisherSC.py destinedFolder mummerPath
 
 Remark: 
 Note that it is assumed that you have "contigs.fasta" , "raw_reads.fasta" in the destinedFolder and mummerPath is your path to Mummer. The key output file is **improved2.fasta** in destinedFolder. 
