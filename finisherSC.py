@@ -165,13 +165,11 @@ def transformCoor(dataList):
 
 
 def useMummerAlign(mummerLink, folderName, outputName, referenceName, queryName):
-    command =mummerLink +"nucmer --maxmatch --nosimplify -p "+folderName + outputName + " " + folderName+ referenceName +" "+ folderName+ queryName
+    command =mummerLink +"nucmer --maxmatch -p "+folderName + outputName + " " + folderName+ referenceName +" "+ folderName+ queryName
     os.system(command)
     
     command  = mummerLink +"show-coords -r "+folderName+outputName+".delta > "+folderName+outputName+"Out"
     os.system(command)
-
-
 
 
 def writeToFile_Double1(folderName, fileName1, fileName2, option = "contig"):
@@ -224,7 +222,10 @@ def reverseComplement(myStr):
             
         elif  myNewStr[i] == 'G' or myNewStr[i] == 'g':
             myNewStr2 += 'C'
-
+        elif myNewStr[i] == 'N' or myNewStr[i] == 'n':
+            myNewStr2 += 'N'
+        else:
+            print myNewStr[i]
             
     return myNewStr2
 
@@ -627,38 +628,48 @@ class seqGraph(object):
             for eachnode in self.graphNodesList:
                 if len(eachnode.nodeIndexList) > 0 :
                     if len(eachnode.listOfNextNodes) == 1 :
-                        oneSucList.append([eachnode.nodeIndex, eachnode.listOfNextNodes[0][0],eachnode.listOfNextNodes[0][1] ])
+                        nextNodeIndex = eachnode.listOfNextNodes[0][0]
+                        if len(self.graphNodesList[nextNodeIndex].listOfPrevNodes) <=2:
+                            oneSucList.append([eachnode.nodeIndex, eachnode.listOfNextNodes[0][0],eachnode.listOfNextNodes[0][1] ,1 ])
                     if len(eachnode.listOfPrevNodes) == 1: 
-                        onePreList.append([eachnode.listOfPrevNodes[0][0], eachnode.nodeIndex,eachnode.listOfPrevNodes[0][1] ])
+                        prevNodeIndex = eachnode.listOfPrevNodes[0][0]
+                        if len(self.graphNodesList[prevNodeIndex].listOfNextNodes) <=2:
+                            onePreList.append([eachnode.listOfPrevNodes[0][0], eachnode.nodeIndex,eachnode.listOfPrevNodes[0][1], 0 ])
+                            
             
              
             print "oneSucList", oneSucList 
             print "onePreList", onePreList
             
-            oneSucList.sort(key=itemgetter(2), reverse = True)
-            onePreList.sort(key = itemgetter(2), reverse = True)
             
-            for eachitem in oneSucList:
-                i, j, wt  = eachitem[0], eachitem[1] , eachitem[2]
-                if nameInEdgeList(i ,self.graphNodesList[j].listOfPrevNodes):
-                    removeList = []
-                    for eachprev in self.graphNodesList[j].listOfPrevNodes:
-                        if eachprev[0] != i :
-                            removeList.append(eachprev[0])
-                    
-                    for eachToRemove in removeList:
-                        self.removeEdge(eachToRemove, j)
+            ### Do them together when sort ? 
+            combinedList = oneSucList + onePreList 
+            combinedList.sort(key = itemgetter(2), reverse = True)
+           
+            
+            for eachitem in combinedList:
+                i, j, wt, myType  = eachitem[0], eachitem[1] , eachitem[2], eachitem[3]
+                
+                if myType == 1:
+                    if nameInEdgeList(i ,self.graphNodesList[j].listOfPrevNodes):
+                        removeList = []
+                        for eachprev in self.graphNodesList[j].listOfPrevNodes:
+                            if eachprev[0] != i :
+                                removeList.append(eachprev[0])
+                        
+                        for eachToRemove in removeList:
+                            self.removeEdge(eachToRemove, j)
     
-            for eachitem in onePreList:
-                i, j, wt  = eachitem[0], eachitem[1] , eachitem[2]
-                if nameInEdgeList(j ,self.graphNodesList[i].listOfNextNodes):
-                    removeList = []
-                    for eachnext in self.graphNodesList[i].listOfNextNodes:
-                        if eachnext[0] != j :
-                            removeList.append(eachnext[0])
+                elif myType == 0:
                     
-                    for eachToRemove in removeList:
-                        self.removeEdge(i, eachToRemove)
+                    if nameInEdgeList(j ,self.graphNodesList[i].listOfNextNodes):
+                        removeList = []
+                        for eachnext in self.graphNodesList[i].listOfNextNodes:
+                            if eachnext[0] != j :
+                                removeList.append(eachnext[0])
+                        
+                        for eachToRemove in removeList:
+                            self.removeEdge(i, eachToRemove)
     
                 
             self.condense()
@@ -1413,10 +1424,11 @@ def loggingReadsToRepeat(blockedSet, contigList):
     for eachitem in matchPair: 
         mystart = eachitem[0]
         myend = eachitem[1]
+        len1, len2 = eachitem[3], eachitem[4]
         
         
         if myend in startList and mystart in endList :
-            returnList.append([mystart, myend])
+            returnList.append([mystart, myend, len1, len2])
             #print eachitem
     
     returnList.sort()
@@ -1431,8 +1443,20 @@ def blockExtraStored(storedStrand,myExtraLinkList,folderName ):
     for key, items in groupby(myExtraLinkList, itemgetter(0,1)):
         mystart = key[0]
         myend = key[1]
-        f.write(str(storedStrand[mystart][0])+'_'+storedStrand[mystart][1]+';'+ str(storedStrand[myend][0])+'_'+storedStrand[myend][1]+'\n')
-
+        maxLen = -1
+        storedLenPair = [-1, -1]
+        count = 0
+        for eachsub in items:
+            print "\t", eachsub
+            count += 1
+            len1, len2 =eachsub[2], eachsub[3]
+            if min(len1, len2) > maxLen:
+                maxLen = min(len1, len2)
+                storedLenPair = [len1, len2]
+        print "Copy count", count, maxLen, storedLenPair
+        #if count > 1:
+        f.write(str(storedStrand[mystart][0])+'_'+storedStrand[mystart][1]+';'+ str(storedStrand[myend][0])+'_'+storedStrand[myend][1]+';'+str(storedLenPair[0])+';'+str(storedLenPair[1])+'\n')
+            
     f.close()
     #print storedStrand 
     #print myExtraLinkList
@@ -1446,6 +1470,8 @@ def loadEdgeFromBlockedReads(folderName):
         myInfo = tmp.split(';')
         inNode = myInfo[0].split('_')
         outNode = myInfo[1].split('_')
+        inWt = int(myInfo[2])
+        outWt = int(myInfo[3])
         
         myInIndex , myOutIndex  = 1997, 1997 
         if inNode[1] == 'p':
@@ -1458,7 +1484,7 @@ def loadEdgeFromBlockedReads(folderName):
         else:
             myOutIndex = 2*int(outNode[0]) +1 
         
-        extraEdges.append([myInIndex, myOutIndex])
+        extraEdges.append([myInIndex, myOutIndex, inWt, outWt])
         tmp = f.readline().rstrip()
     
     f.close()
@@ -1473,7 +1499,7 @@ def formMatchPairFromReadInfo(dataSet):
     
     matchPair = []
     for key, items in groupby(dataSet, itemgetter(0)):
-        #print "key", key
+        print "key", key
         left = []
         right = []
         
@@ -1702,7 +1728,13 @@ def xPhased(folderName , mummerLink ):
     
     numberOfContig, dataSet = obtainLinkInfo(folderName, mummerLink,"improved2", "mb")
     
+    lenDic = obtainLength(folderName, "improved2_Double.fasta")
+    
+    confidenLenThres = 0 
+    
     G = seqGraph(numberOfContig)
+    extraEdges = loadEdgeFromBlockedReads(folderName)
+    
     for eachitem in dataSet:
         #print eachitem
         wt, myin, myout = eachitem
@@ -1722,18 +1754,20 @@ def xPhased(folderName , mummerLink ):
         i =int(myInData[0])*2 + offsetin
         j = int(myOutData[0])*2 + offsetout
         
-        G.insertEdge(i, j, wt)
-    
-    extraEdges = []
-    #extraEdges = loadEdgeFromBlockedReads(folderName)
+        ck = False
         
-    for eachedge in extraEdges:
-        G.insertEdge(eachedge[0],eachedge[1], 0)
+        for eachedge in extraEdges:
+            mystart, myend, len1, len2 = eachedge[0], eachedge[1],  eachedge[2] , eachedge[3]
+            if [i,j] == [mystart, myend] and min(len1,len2) >=wt and lenDic[myin] >= confidenLenThres and lenDic[myout] >= confidenLenThres:
+                ck = True
+                
+        if ck:
+            G.insertEdge(i, j, wt)
     
     
     #G.reportEdge()
     G.MBResolve()
-    #G.reportEdge()
+    G.reportEdge()
         
     G.saveToFile(folderName, "condensedGraphMB.txt")
     graphFileName = "condensedGraphMB.txt"
@@ -1847,6 +1881,7 @@ def readContigOut(folderName, mummerLink, graphFileName,contigFile, outContigFil
     fImproved.close()
     
     print "All contigs used? ", all(contigUsed)
+    print "NContig", len(seqToPrint)
 
     f = open( folderName + outOpenList, 'w')
     f.write(str(len(seqToPrint))+'\n')
