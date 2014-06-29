@@ -13,7 +13,7 @@ To run a repeat aware version:
 	
 ## Input and output files ##
 
-Note that it is assumed that you have "contigs.fasta" , "raw_reads.fasta" in the destinedFolder and mummerPath is your path to Mummer. The key output file is **improved2.fasta** in destinedFolder. 
+Note that it is assumed that you have "contigs.fasta" , "raw_reads.fasta" in the destinedFolder and mummerPath is your path to Mummer. For , "finisher.py", the key output file is **improved2.fasta** in destinedFolder. For "finisherSC.py", the key output file is **improved3.fasta** in destinedFolder. 
 
 Here is an example run with the pre-installed data files and softwares(e.g. Mummer, Gepard) [Please go to https://www.dropbox.com/sh/xjpt8xf5g1xf0ek/bGmZvt9Zfd to Download the EColi-Data set as test cases coz it is too big for GitHub].
 
@@ -32,5 +32,3 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 3. If you want polishing to be done for the gaps in the greedy mode, you can add polish at the end as follows:
 	
 	python finisher.py EcoliTestRun/ MUMmer3.23/ polish
-
-4. If you want to have a more aggressive output in the repeat aware mode, you can just use the improved3.fasta in your destinedFolder. It is already ouputted there after you run finisherSC.py 
