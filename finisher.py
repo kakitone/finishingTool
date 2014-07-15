@@ -541,7 +541,8 @@ def formRelatedReadsFile(folderName,mummerLink):
     assoiatedReadIndex = []
     nameList = []
     numberOfFiles = 20
-    command = "./fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"raw_reads.fasta"
+    bindir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    command = bindir+"/fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"raw_reads.fasta"
     os.system(command)
     
     for dummyI in range(1, numberOfFiles+1):
@@ -637,7 +638,8 @@ def formRelatedReadsFile(folderName,mummerLink):
     writeToFile_Double1(folderName, "relatedReads.fasta", "relatedReads_Double.fasta","read")
     
     numberOfFiles = 20
-    command = "./fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"relatedReads_Double.fasta"
+    bindir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    command = bindir+"/fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"relatedReads_Double.fasta"
     os.system(command)
     
 

@@ -271,7 +271,9 @@ def removeItem(myList,myname ):
 def quastEvaluate(folderName, quastLink, originalName, improvedNameList, referenceName ):
     
     # ./quast.py ~/git/myFinisher/finishingTool/S_cerivisea/contigs.fasta  ~/git/myFinisher/finishingTool/S_cerivisea/improved.fasta -R ~/git/myFinisher/finishingTool/S_cerivisea/reference.fasta
-    header = quastLink + "quast.py"+ " "
+    bindir = os.path.abspath(os.path.dirname(sys.argv[0]))   
+    header = bindir +"/"+ quastLink + "quast.py"+ " "
+    
     originalContigPath = folderName + originalName +" "
     improvedContigPath = "" 
     for eachname in improvedNameList:
@@ -284,8 +286,8 @@ def quastEvaluate(folderName, quastLink, originalName, improvedNameList, referen
     
     os.system(command)
     
-    
-    command = "cp "+"quast_results/latest/report.txt " + folderName + "assemblyAssessment.txt"
+    bindir = os.path.abspath(os.path.dirname(sys.argv[0]))    
+    command = "cp "+bindir+"/quast_results/latest/report.txt " + folderName + "assemblyAssessment.txt"
     os.system(command)
 
 def compareGraphUnitTest(G, G2):
@@ -780,7 +782,8 @@ def formRelatedReadsFile(folderName,mummerLink):
     
     numberOfFiles = 20
     if True:
-        command = "./fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"raw_reads.fasta"
+        bindir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        command = bindir+ "/fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"raw_reads.fasta"
         os.system(command)
     
     for dummyI in range(1, numberOfFiles+1):
@@ -877,7 +880,8 @@ def formRelatedReadsFile(folderName,mummerLink):
     
     numberOfFiles = 20
     if True:
-        command = "./fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"relatedReads_Double.fasta"
+        bindir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        command = bindir+ "/fasta-splitter.pl --n-parts "+str(numberOfFiles)+" "+ folderName+"relatedReads_Double.fasta"
         os.system(command)
     
 
@@ -1917,6 +1921,7 @@ def fillGap(folderName , mummerLink):
 ### 7) Compare with reference (I: improved.fasta, improved2.fasta, reference.fasta ; O : assembly assessment report )
 def compareWithReference(folderName , mummerLink):
     print "compareWithReference"
+    
     quastEvaluate(folderName, "quast-2.3/", originalName = "contigs.fasta", improvedNameList= ["noEmbed.fasta", "improved.fasta", "improved2.fasta", "improved3.fasta"] , referenceName= "reference.fasta" )
     #quastEvaluate(folderName, "quast-2.3/", originalName = "contigs.fasta", improvedNameList= ["noEmbed.fasta", "improved.fasta"] , referenceName= "reference.fasta" )
     
@@ -1937,7 +1942,7 @@ def mainFlow(folderName , mummerLink ):
     #compareWithReference(folderName , mummerLink)
     
     print "<3 Do cool things that matter <3"
-    
+     
 #folderName = "S_cerivisea/"
 #mummerLink = "MUMmer3.23/"
     
