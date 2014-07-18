@@ -1394,11 +1394,11 @@ def mainFlow(folderName,mummerLink,option):
     newGraphPipeLine(folderName, mummerLink, option)
     
     
-    os.system("cp raw_reads.* "+ folderName)
-    os.system("rm raw_reads.*")
+    #os.system("cp raw_reads.part* "+ folderName)
+    os.system("rm raw_reads.part*")
     
-    os.system("cp relatedReads_Double.* "+ folderName)
-    os.system("rm relatedReads_Double.*")
+    #os.system("cp relatedReads_Double.part* "+ folderName)
+    os.system("rm relatedReads_Double.part*")
     
     
 t0 = time.time()

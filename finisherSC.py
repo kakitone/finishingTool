@@ -1908,12 +1908,13 @@ def fillGap(folderName , mummerLink):
     extractEdgeSet(folderName, mummerLink)
     
     
-    os.system("cp raw_reads.* "+ folderName)
-    os.system("rm raw_reads.*")
     
-    os.system("cp relatedReads_Double.* "+ folderName)
-    os.system("rm relatedReads_Double.*")
+    #os.system("cp raw_reads.part* "+ folderName)
+    os.system("rm raw_reads.part*")
     
+    #os.system("cp relatedReads_Double.part* "+ folderName)
+    os.system("rm relatedReads_Double.part*")
+
 
     
 
@@ -1949,7 +1950,7 @@ def mainFlow(folderName , mummerLink ):
 t0 = time.time()
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
-
+print os.path.abspath(os.path.dirname(sys.argv[0]))  
 folderName = sys.argv[1]
 mummerLink = sys.argv[2]
 
