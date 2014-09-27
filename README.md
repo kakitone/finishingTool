@@ -1,6 +1,7 @@
 finishingTool
 =============
-Contact author: Ka-Kit Lam, kklam@eecs.berkeley.edu
+If you encounter any issue, please feel free to directly contact me at kklam@eecs.berkeley.edu
+My name is  Ka-Kit Lam. 
 
 ## Command to run the tool ##
 
