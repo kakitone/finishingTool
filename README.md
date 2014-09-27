@@ -1,5 +1,6 @@
 finishingTool
 =============
+Contact author: Ka-Kit Lam, kklam@eecs.berkeley.edu
 
 ## Command to run the tool ##
 
