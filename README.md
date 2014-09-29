@@ -27,7 +27,7 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 2. If you have problem running scipy.weave, try to remove ~/.python27_compiled 
 3. There is an experimental improvement based on repeat phasing and the further improved file is improved4.fasta. An illustration of that part is given in http://arxiv.org/abs/1402.6971 . To experiment with that, first run finisherSC.py as before. After that, you can issue the following command:
 
-	python newPhasing.py destinedFolder mummerPath
+	python experimental/newPhasing.py destinedFolder mummerPath
 
 
 
