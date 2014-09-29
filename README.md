@@ -25,9 +25,9 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 ## Remarks ##
 1. After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs in improved2.fasta
 2. If you have problem running scipy.weave, try to remove ~/.python27_compiled 
-3. There is an experimental improvement based on repeat phasing, an illustration of that part is given in http://arxiv.org/abs/1402.6971 . To experiment with that, first run finisherSC.py as before then issue the command :
+3. There is an experimental improvement based on repeat phasing and the further improved file is improved4.fasta. An illustration of that part is given in http://arxiv.org/abs/1402.6971 . To experiment with that, first run finisherSC.py as before then issue the command:
 
 	python newPhasing.py destinedFolder mummerPath
 
-and the further improved file is improved4.fasta
+
 
