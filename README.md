@@ -11,7 +11,7 @@ Here is the command to run the tool:
 	
 ## Input and output files ##
 
-Note that it is assumed that you have "contigs.fasta" , "raw_reads.fasta" in the destinedFolder and mummerPath is your path to Mummer. For "finisherSC.py", the key output file is **improved3.fasta** in destinedFolder. 
+Note that it is assumed that you have "contigs.fasta" , "raw_reads.fasta" in the destinedFolder and mummerPath is your path to Mummer. Therefore, please rename the files in the destinedFolder if needed. For "finisherSC.py", the key output file is **improved3.fasta** in destinedFolder. 
 
 
 ## A sample test run ##
