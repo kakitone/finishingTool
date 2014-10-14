@@ -3,6 +3,8 @@ finishingTool
 If you encounter any issue, please feel free to directly contact me at kklam@eecs.berkeley.edu
 My name is  Ka-Kit Lam. 
 
+Our paper is located at http://biorxiv.org/content/early/2014/10/14/010215 
+
 ## Command to run the tool ##
 
 Here is the command to run the tool:
