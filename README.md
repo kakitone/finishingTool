@@ -25,23 +25,24 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 
 ## Options ##
 Supplementary usage: 
-1. Fast mode (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): 
+a)Fast mode (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): 
 
-python finisherSC.py destinedFolder MUMmer3.23 -f True 
+	python finisherSC.py destinedFolder MUMmer3.23 -f True 
 [It means that you want to use the fast mode ]
 
-2. Pick from previous jobs (e.g. you have got improved2.fasta but the cluster node timeout and you want to start from improved2.fasta instead of from scratch)
+b)Pick from previous jobs (e.g. you have got improved2.fasta but the cluster node timeout and you want to start from improved2.fasta instead of from scratch)
 
-python finisherSC.py destinedFolder MUMmer3.23  -p improved2.fasta
+	python finisherSC.py destinedFolder MUMmer3.23  -p improved2.fasta
 
-3. Mapping between old contigs and new contigs(e.g. you want to know how the contigs from contigs.fasta are mapped to improved3.fasta )
+c)Mapping between old contigs and new contigs(e.g. you want to know how the contigs from contigs.fasta are mapped to improved3.fasta )
 
-python finisherSC.py destinedFolder MUMmer3.23 -o contigs.fasta_improved3.fasta
+	python finisherSC.py destinedFolder MUMmer3.23 -o contigs.fasta_improved3.fasta
 [It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]
 
 4. You can always use -h to get the usage suggestion. 
 
-python finisherSC.py -h
+	python finisherSC.py -h
+
 usage: finisherSC.py [-h] [-p PICKUP] [-o MAPCONTIGS] [-f FAST]
                      folderName mummerLink
 
