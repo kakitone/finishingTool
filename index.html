@@ -40,7 +40,7 @@
       </nav>
       <section>
         <h1>
-<a name="finishingtool" class="anchor" href="#finishingtool"><span class="octicon octicon-link"></span></a>finishingTool</h1>
+<a name="finishersc" class="anchor" href="#finishersc"><span class="octicon octicon-link"></span></a>FinisherSC</h1>
 
 <p>If you encounter any issue, please feel free to directly contact me at <a href="mailto:kklam@eecs.berkeley.edu">kklam@eecs.berkeley.edu</a>
 My name is  Ka-Kit Lam. </p>
@@ -70,6 +70,33 @@ My name is  Ka-Kit Lam. </p>
 <li>After the processing, take the file whose name is <strong>improved3.fasta</strong> in destinedFolder and this is your output file.</li>
 <li>If you want to visualize the output against the reference, you can use software like Gepard.</li>
 </ol>
+
+<h2>
+<a name="optionssupplementary-usage" class="anchor" href="#optionssupplementary-usage"><span class="octicon octicon-link"></span></a>Options[Supplementary usage]</h2>
+
+<p>a)Fast mode (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): </p>
+
+<pre><code>python finisherSC.py destinedFolder MUMmer3.23 -f True 
+</code></pre>
+
+<p>[It means that you want to use the fast mode ]</p>
+
+<p>b)Pick from previous jobs (e.g. you have got improved2.fasta but the cluster node timeout and you want to start from improved2.fasta instead of from scratch)</p>
+
+<pre><code>python finisherSC.py destinedFolder MUMmer3.23  -p improved2.fasta
+</code></pre>
+
+<p>c)Mapping between old contigs and new contigs(e.g. you want to know how the contigs from contigs.fasta are mapped to improved3.fasta )</p>
+
+<pre><code>python finisherSC.py destinedFolder MUMmer3.23 -o contigs.fasta_improved3.fasta
+</code></pre>
+
+<p>[It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]</p>
+
+<p>d)Help. You can always use -h to get the usage suggestion. </p>
+
+<pre><code>python finisherSC.py -h
+</code></pre>
 
 <h2>
 <a name="remarks" class="anchor" href="#remarks"><span class="octicon octicon-link"></span></a>Remarks</h2>
