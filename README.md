@@ -23,8 +23,7 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 2. After the processing, take the file whose name is **improved3.fasta** in destinedFolder and this is your output file.
 3. If you want to visualize the output against the reference, you can use software like Gepard.
 
-## Options ##
-Supplementary usage: 
+## Options[Supplementary usage] ##
 a)Fast mode (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): 
 
 	python finisherSC.py destinedFolder MUMmer3.23 -f True 
@@ -39,7 +38,7 @@ c)Mapping between old contigs and new contigs(e.g. you want to know how the cont
 	python finisherSC.py destinedFolder MUMmer3.23 -o contigs.fasta_improved3.fasta
 [It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]
 
-d)You can always use -h to get the usage suggestion. 
+d)Help. You can always use -h to get the usage suggestion. 
 
 	python finisherSC.py -h
 
