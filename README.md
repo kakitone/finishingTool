@@ -39,31 +39,9 @@ c)Mapping between old contigs and new contigs(e.g. you want to know how the cont
 	python finisherSC.py destinedFolder MUMmer3.23 -o contigs.fasta_improved3.fasta
 [It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]
 
-4. You can always use -h to get the usage suggestion. 
+d)You can always use -h to get the usage suggestion. 
 
 	python finisherSC.py -h
-
-usage: finisherSC.py [-h] [-p PICKUP] [-o MAPCONTIGS] [-f FAST]
-                     folderName mummerLink
-
-FinisherSC : a repeat-aware tool to upgrade de-novo assembly with long reads
-
-positional arguments:
-  folderName
-  mummerLink
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PICKUP, --pickup PICKUP
-                        Picks up existing work (input is noEmbed.fasta,
-                        improved.fasta or improved2.fasta)
-  -o MAPCONTIGS, --mapcontigs MAPCONTIGS
-                        Maps new contigs to old contigs(input is of the format
-                        of contigs.fasta_improved3.fasta which means
-                        improved3.fasta will be mapped back to contigs.fasta;
-                        Output can be found in mappingResults.txt in the
-                        destinedFolder;)
-  -f FAST, --fast FAST  Fast aligns contigs (input is True)
 
 
 ## Remarks ##
