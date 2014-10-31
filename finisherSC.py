@@ -166,7 +166,7 @@ def transformCoor(dataList):
     return newList
 
 
-def useMummerAlign(mummerLink, folderName, outputName, referenceName, queryName, specialForRaw = False):
+def useMummerAlign(mummerLink, folderName, outputName, referenceName, queryName, specialForRaw = False, specialName = ""):
     
     if not specialForRaw:
         if globalFast:
@@ -181,7 +181,11 @@ def useMummerAlign(mummerLink, folderName, outputName, referenceName, queryName,
             
     os.system(command)
     
-    command = mummerLink + "show-coords -r " + folderName + outputName + ".delta > " + folderName + outputName + "Out"
+    if not specialForRaw:
+        command = mummerLink + "show-coords -r " + folderName + outputName + ".delta > " + folderName + outputName + "Out"
+    else:
+        command = mummerLink + "show-coords -r " + folderName + outputName + ".delta > " + folderName + specialName 
+        
     os.system(command)
 
 
@@ -807,7 +811,7 @@ def formRelatedReadsFile(folderName, mummerLink):
             indexOfMum = str(dummyI)
         
         if True:
-            useMummerAlign(mummerLink, folderName, "out", "improvedTrunc.fasta", "raw_reads.part-" + indexOfMum + ".fasta", True)
+            useMummerAlign(mummerLink, folderName, "out", "improvedTrunc.fasta", "raw_reads.part-" + indexOfMum + ".fasta", True, "fromMum" + indexOfMum )
             
             '''
             command = mummerLink + "nucmer --maxmatch --nosimplify -p " + folderName + "out " + folderName + "improvedTrunc.fasta raw_reads.part-" + indexOfMum + ".fasta"
@@ -984,7 +988,7 @@ def extractEdgeSet(folderName, mummerLink, option="nopolish"):
             indexOfMum = str(dummyI)
 
         if True:
-            useMummerAlign(mummerLink, folderName, "outRefine", "smaller_improvedContig.fasta", "relatedReads_Double.part-" + indexOfMum + ".fasta", True)
+            useMummerAlign(mummerLink, folderName, "outRefine", "smaller_improvedContig.fasta", "relatedReads_Double.part-" + indexOfMum + ".fasta", True,  "fromMumRefine" + indexOfMum)
             
             '''
             command = mummerLink + "nucmer --maxmatch --simplify -p " + folderName + "outRefine " + folderName + "smaller_improvedContig.fasta " + "relatedReads_Double.part-" + indexOfMum + ".fasta"
