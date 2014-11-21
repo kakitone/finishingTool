@@ -26,16 +26,16 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 ## Options[Supplementary usage] ##
 a)Fast mode (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): 
 
-	python finisherSC.py destinedFolder MUMmer3.23 -f True 
+	python finisherSC.py destinedFolder mummerPath -f True 
 [It means that you want to use the fast mode ]
 
 b)Pick from previous jobs (e.g. you have got improved2.fasta but the cluster node timeout and you want to start from improved2.fasta instead of from scratch)
 
-	python finisherSC.py destinedFolder MUMmer3.23  -p improved2.fasta
+	python finisherSC.py destinedFolder mummerPath  -p improved2.fasta
 
 c)Mapping between old contigs and new contigs(e.g. you want to know how the contigs from contigs.fasta are mapped to improved3.fasta )
 
-	python finisherSC.py destinedFolder MUMmer3.23 -o contigs.fasta_improved3.fasta
+	python finisherSC.py destinedFolder mummerPath -o contigs.fasta_improved3.fasta
 [It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]
 
 d)There is an experimental improvement based on repeat phasing and the further improved file is improved4.fasta. An illustration of that part is given in Fig. 7 of http://arxiv.org/abs/1402.6971 . To experiment with that, first run finisherSC.py as before. After that, you can issue the following command:
