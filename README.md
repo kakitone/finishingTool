@@ -38,7 +38,16 @@ c)Mapping between old contigs and new contigs(e.g. you want to know how the cont
 	python finisherSC.py destinedFolder MUMmer3.23 -o contigs.fasta_improved3.fasta
 [It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]
 
-d)Help. You can always use -h to get the usage suggestion. 
+d)There is an experimental improvement based on repeat phasing and the further improved file is improved4.fasta. An illustration of that part is given in Fig. 7 of http://arxiv.org/abs/1402.6971 . To experiment with that, first run finisherSC.py as before. After that, you can issue the following command:
+
+	python experimental/xPhaser.py destinedFolder mummerPath
+
+e) There is also an experimental improvement resolving tandem repeat.  To experiment with that, first run finisherSC.py as before. After that, you can issue the following command:
+
+	python experimental/tSolver.py destinedFolder mummerPath
+
+
+f)Help. You can always use -h to get the usage suggestion. 
 
 	python finisherSC.py -h
 
@@ -46,9 +55,6 @@ d)Help. You can always use -h to get the usage suggestion.
 ## Remarks ##
 1. After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs( i.e. improved3.fasta )
 2. If you have problem running scipy.weave, try to remove ~/.python27_compiled 
-3. There is an experimental improvement based on repeat phasing and the further improved file is improved4.fasta. An illustration of that part is given in Fig. 7 of http://arxiv.org/abs/1402.6971 . To experiment with that, first run finisherSC.py as before. After that, you can issue the following command:
-
-	python experimental/newPhasing.py destinedFolder mummerPath
 
 
 
