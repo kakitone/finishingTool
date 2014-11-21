@@ -42,7 +42,7 @@ d)There is an experimental improvement based on repeat phasing and the further i
 
 	python experimental/xPhaser.py destinedFolder mummerPath
 
-e) There is also an experimental improvement resolving tandem repeat.  To experiment with that, first run finisherSC.py as before. After that, you can issue the following command:
+e) There is also an experimental improvement resolving tandem repeat. The further improved file is tademResolved.fasta. To experiment with that, first run finisherSC.py as before. After that, you can issue the following command:
 
 	python experimental/tSolver.py destinedFolder mummerPath
 
