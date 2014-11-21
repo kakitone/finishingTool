@@ -1763,8 +1763,6 @@ def formSeqGraph(folderName , mummerLink):
     outOpenList = "openZone.txt"
     
     readContigOut(folderName, mummerLink, graphFileName, contigFile, outContigFile, outOpenList)
-   
-    
 
 # ## 3) X-phased seqGraph (I: startList, graphNodes; O: startList, graphNodes )
 def xPhased(folderName , mummerLink):
@@ -1831,8 +1829,7 @@ def xPhased(folderName , mummerLink):
     # 6. Find out the repeat region by MSA
     # 7. Find out the location of SNPs and extend across repeat 
     # [short cut : use contig creator : your job here is to get data into the correct formats]
-    
-    
+    # Done here 
     
     
     print "xPhased"
@@ -1989,6 +1986,8 @@ def mainFlow(folderName , mummerLink):
     
 # folderName = "S_cerivisea/"
 # mummerLink = "MUMmer3.23/"
+
+
 """    
 t0 = time.time()
 print 'Number of arguments:', len(sys.argv), 'arguments.'
@@ -2001,3 +2000,6 @@ mummerLink = sys.argv[2]
 mainFlow(folderName,mummerLink)
 print  "Time",  time.time() - t0
 """
+
+
+

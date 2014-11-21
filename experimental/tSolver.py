@@ -1,8 +1,9 @@
+import tandemRepeatSolver
 import sys
 import time
 import os
-import newPhasing
-
+#folderName = "../dataFolders/"
+#mummerPath = "MUMmer3.23/"
 
 t0 = time.time()
 print 'Number of arguments:', len(sys.argv), 'arguments.'
@@ -12,6 +13,5 @@ folderName = sys.argv[1]
 mummerLink = sys.argv[2]
 
 
-newPhasing.mainFlow(folderName, mummerLink)
+tandemRepeatSolver.mainFlowForTandemResolve(folderName, mummerLink)
 print  "Time", time.time() - t0
-  

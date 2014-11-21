@@ -56,7 +56,7 @@ def checkPathLength(path, G, N1, folderName):
                 
         
 # ## Helper Functions
-def outputResults(folderName,mummerLink, toPhaseList, N1, G):
+def outputResults(folderName, mummerLink, toPhaseList, N1, G):
     '''    
     Algorithm :
     a) Write as contigs 
@@ -75,11 +75,11 @@ def outputResults(folderName,mummerLink, toPhaseList, N1, G):
     tmp = fin.readline().rstrip()
     while len(tmp) > 0:
         if tmp[0] != ">":
-            fout.write(tmp+"\n")
+            fout.write(tmp + "\n")
         else:
             infoArr = tmp[5:].split("_")
-            fout.write(">Contig"+str(int(infoArr[0]) + N1/2))
-            fout.write("_"+infoArr[1]+ "\n")
+            fout.write(">Contig" + str(int(infoArr[0]) + N1 / 2))
+            fout.write("_" + infoArr[1] + "\n")
         tmp = fin.readline().rstrip()
         
     fin.close()
@@ -96,7 +96,7 @@ def outputResults(folderName,mummerLink, toPhaseList, N1, G):
     for eachitem in toPhaseList:
         repeat = eachitem[-3]
         flanking = eachitem[-2]
-        result= eachitem[-1]
+        result = eachitem[-1]
         
         
         revrepeat = []
@@ -106,12 +106,12 @@ def outputResults(folderName,mummerLink, toPhaseList, N1, G):
         revflanking = [[] for i in range(4)] 
         
         for j in range(2):
-            for eachsub in eachitem[-2][j+2][-1::-1]:
+            for eachsub in eachitem[-2][j + 2][-1::-1]:
                 revflanking[j].append(eachsub + pow(-1, eachsub))
             for eachsub in eachitem[-2][j][-1::-1]:
-                revflanking[j+2].append(eachsub + pow(-1, eachsub))
+                revflanking[j + 2].append(eachsub + pow(-1, eachsub))
             
-        revresult= eachitem[-1]
+        revresult = eachitem[-1]
         
         completePhaseList.append([repeat, flanking, result])
         completePhaseList.append([revrepeat, revflanking, revresult])
@@ -124,23 +124,23 @@ def outputResults(folderName,mummerLink, toPhaseList, N1, G):
         nameDic[i] = i
         
     for eachitem in completePhaseList:
-        repeat, flanking, result = eachitem[0] ,eachitem[1] ,eachitem[2]
+        repeat, flanking, result = eachitem[0] , eachitem[1] , eachitem[2]
         path = [[], []]
         
         if result == 0:
-            path[0] = flanking[0][0:-1] + repeat+ flanking[2][1:]
-            path[1] = flanking[1][0:-1] + repeat+ flanking[3][1:]
+            path[0] = flanking[0][0:-1] + repeat + flanking[2][1:]
+            path[1] = flanking[1][0:-1] + repeat + flanking[3][1:]
         else:
-            path[0] = flanking[0][0:-1] + repeat+ flanking[3][1:]
-            path[1] = flanking[1][0:-1] + repeat+ flanking[2][1:]
+            path[0] = flanking[0][0:-1] + repeat + flanking[3][1:]
+            path[1] = flanking[1][0:-1] + repeat + flanking[2][1:]
         
         print path[0] , path[1]
         for i  in range(2):
             eachpath = path[i]
             currentNode = G2.graphNodesList[eachpath[0]]
             
-            for nextNodeIndex,ctr in zip(eachpath[1:], range(len(eachpath[1:]))):
-                if ctr !=len(eachpath[1:]) -1:
+            for nextNodeIndex, ctr in zip(eachpath[1:], range(len(eachpath[1:]))):
+                if ctr != len(eachpath[1:]) - 1:
                     myindex = len(G2.graphNodesList)
                     nameDic[myindex] = nextNodeIndex
                     
@@ -155,7 +155,7 @@ def outputResults(folderName,mummerLink, toPhaseList, N1, G):
                         wt = eachck[1]
                         break
                     
-                newNode.listOfPrevNodes.append([currentNode.nodeIndex,wt])
+                newNode.listOfPrevNodes.append([currentNode.nodeIndex, wt])
                 currentNode.listOfNextNodes.append([newNode.nodeIndex, wt])
                 
                 currentNode = newNode
@@ -449,14 +449,14 @@ def checkMiss(myNode, rIn, rOut):
             break
     return index
 
-def markInsideNodes(G, rIn, rOut):
+def markInsideNodes(G, kkIn, kkOut):
 
     print "markInsideNodes"
-    singleMissList = [[rIn[0]] , [rIn[1]], [rOut[0]], [rOut[1]]]
+    singleMissList = [[int(kkIn[0].split('_')[0])] , [int(kkIn[1].split('_')[0])], [int(kkOut[0].split('_')[0])], [int(kkOut[1].split('_')[0])]]
     allPassList = []
     
     for eachitem in G.graphNodesList:
-        result = checkMiss(eachitem, rIn, rOut)
+        result = checkMiss(eachitem, kkIn, kkOut)
         if result == -1: 
             allPassList.append(eachitem.nodeIndex)
         elif result == 0:
@@ -474,14 +474,17 @@ def markInsideNodes(G, rIn, rOut):
     return singleMissList, allPassList
 
 def addIndicesToReachable(x, G, N1):
+    
+    
+    tmp = int(x.split('_')[0])
 
-    findAllReachable(x, N1, G)
+    findAllReachable(tmp , N1, G)
     
     for eachnode in G.graphNodesList:
         if eachnode.visited == True and eachnode.nodeIndex >= N1:
             eachnode.visitLabelList.append(x)
         
-        
+
 def markReachableIndices(G, Grev, rIn, rOut, N1):
     print "markReachableIndices"
     for eachitem in G.graphNodesList:
@@ -590,8 +593,8 @@ def debugGraphPath(startIndex, endIndex, G, N1):
 # ## end debug code 
 
 
-def filterEdge(adjacencyList, folderName):
-    lenDic = commonLib.obtainLength(folderName, "improved3_Double.fasta")
+def filterEdge(adjacencyList, folderName, contigFilename):
+    lenDic = commonLib.obtainLength(folderName, contigFilename + "_Double.fasta")
     thresFoPhase = 2000
     smallList, largeList = [], []
     for eachitem in lenDic:
@@ -605,7 +608,7 @@ def filterEdge(adjacencyList, folderName):
     
     for i in largeList:
         for eachitem in adjacencyList[i]:
-########IMPORTANT:
+######## IMPORTANT:
             if  eachitem in largeList and eachitem / 2 != i / 2:
 ######## NEED TO REMOVE IN PRODUCTION if True
                 newAdjacencyList[i].append(eachitem)
@@ -729,7 +732,7 @@ def filterData(dataList, lenDic):
 # ## New Phasing Step
 # ## Pre-processing of the phasing 
 
-def getAllAssociatedReads(folderName, mummerLink):
+def getAllAssociatedReads(folderName, mummerLink,forFastaName):
     '''
     Input : relatedReads.fasta, raw_reads.fasta 
     Output : all_associated_reads.fasta
@@ -740,7 +743,6 @@ def getAllAssociatedReads(folderName, mummerLink):
             i) Align the raws and tmp_seedReads
             ii) Put the new reads into the SeedReads
     '''
-    forFastaName = "phasingSeedName"
     header, referenceFile, queryFile = "seedReads", forFastaName + ".fasta" , "raw_reads.fasta"
     command = "cp " + folderName + "relatedReads.fasta " + folderName + referenceFile
     os.system(command)
@@ -782,7 +784,7 @@ def getAllAssociatedReads(folderName, mummerLink):
         os.system(command)
         
     
-def formReadContigStringGraph(folderName, mummerLink):
+def formReadContigStringGraph(folderName, mummerLink, contigFilename, readsetFilename, optTypeFileHeader, graphName):
     
     '''
     Input : all_associated_reads.fasta, improved3.fasta
@@ -793,31 +795,31 @@ def formReadContigStringGraph(folderName, mummerLink):
         c) Use the subroutine to output a graph                     V
         d) Output the graph to a file phasing_String_graph.graph    V
     '''
-    
+
     G = []
 
-    commonLib.writeToFile_Double1(folderName, "improved3.fasta", "improved3_Double.fasta", "contig")
-    commonLib.writeToFile_Double1(folderName, "phasingSeedName.fasta", "phasingSeedName_Double.fasta", "reads")
+    commonLib.writeToFile_Double1(folderName, contigFilename + ".fasta", contigFilename + "_Double.fasta", "contig")
+    commonLib.writeToFile_Double1(folderName, readsetFilename + ".fasta", readsetFilename + "_Double.fasta", "reads")
     
     
-    header, referenceFile, queryFile = "phaseStringCC", "improved3_Double.fasta" , "improved3_Double.fasta"
+    header, referenceFile, queryFile = optTypeFileHeader + "CC", contigFilename + "_Double.fasta" , contigFilename + "_Double.fasta"
     if True:
         commonLib.useMummerAlign(mummerLink, folderName, header, referenceFile, queryFile)
 
-    lenDicCC = commonLib.obtainLength(folderName, "improved3_Double.fasta")
+    lenDicCC = commonLib.obtainLength(folderName, contigFilename + "_Double.fasta")
     dataListCC = commonLib.extractMumData(folderName, header + "Out")
     dataListCC = filterData(dataListCC, lenDicCC)
     
-    header, referenceFile, queryFile = "phaseStringRR", "phasingSeedName_Double.fasta" , "phasingSeedName_Double.fasta"
+    header, referenceFile, queryFile = optTypeFileHeader + "RR", readsetFilename + "_Double.fasta" , readsetFilename + "_Double.fasta"
     if True:
         commonLib.useMummerAlign(mummerLink, folderName, header, referenceFile, queryFile)
     
-    lenDicRR = commonLib.obtainLength(folderName, "phasingSeedName_Double.fasta")
+    lenDicRR = commonLib.obtainLength(folderName, readsetFilename + "_Double.fasta")
 
     dataListRR = commonLib.extractMumData(folderName, header + "Out")
     dataListRR = filterData(dataListRR, lenDicRR)
 
-    header, referenceFile, queryFile = "phaseStringCR", "improved3_Double.fasta" , "phasingSeedName_Double.fasta"
+    header, referenceFile, queryFile = optTypeFileHeader + "CR", contigFilename + "_Double.fasta" , readsetFilename + "_Double.fasta"
     if True:
         commonLib.useMummerAlign(mummerLink, folderName, header, referenceFile, queryFile)
     
@@ -854,7 +856,7 @@ def formReadContigStringGraph(folderName, mummerLink):
     
     addDataToList(dataListCR, G, 0, N1, 'C', 'R')
     # G.reportEdge()
-    G.saveToFile(folderName, "phaseStringGraph1")
+    G.saveToFile(folderName, graphName)
     
     checkGraphLength(G, N1, lenDicRR)
     
@@ -870,7 +872,7 @@ def getDistinct(myList):
         newList.append(key)
     
     return newList
-def identifyRepeat(folderName, mummerLink):
+def identifyRepeat(folderName, mummerLink,contigFilename,contigReadGraph, repeatFilename, optionToRun  ):
     '''
     Input : Graph --- phaseStringGraph1
     Output: repeat pairs { [ (1,2), (3,4) ] , [(5,6),(7,8)] } 
@@ -883,9 +885,9 @@ def identifyRepeat(folderName, mummerLink):
     
     # ## (a) reachability test to find partners 
     G = commonLib.seqGraph(0)
-    G.loadFromFile(folderName, "phaseStringGraph1")
+    G.loadFromFile(folderName, contigReadGraph)
     # G.reportEdge()
-    lenDicCC = commonLib.obtainLength(folderName, "improved3_Double.fasta")
+    lenDicCC = commonLib.obtainLength(folderName, contigFilename+"_Double.fasta")
     
     adjacencyList = [[] for i in range(len(lenDicCC))]
     
@@ -902,7 +904,10 @@ def identifyRepeat(folderName, mummerLink):
         print "i, adjacencyList[i] : ", i , adjacencyList[i]
     
     # ## (b) formation of bipartite graph
-    newAdjacencyList = filterEdge(adjacencyList, folderName)
+    if optionToRun == "tandem" :
+        newAdjacencyList = adjacencyList
+    elif optionToRun == "xphase": 
+        newAdjacencyList = filterEdge(adjacencyList, folderName, contigFilename)
     
     G2 = commonLib.seqGraph(N1 * 2)
     for i in range(N1):
@@ -924,17 +929,17 @@ def identifyRepeat(folderName, mummerLink):
         
         repeatList.append([getDistinct(leftList), getDistinct(rightList)])
            
-    with open(folderName + 'phaseRepeat.txt', 'w') as outfile:
+    with open(folderName + repeatFilename, 'w') as outfile:
         json.dump(repeatList, outfile)
 
     
-    json_data = open(folderName + 'phaseRepeat.txt', 'r')
+    json_data = open(folderName + repeatFilename, 'r')
     loadData = json.load(json_data)
     
     
     assert(loadData == repeatList)
     
-def defineRepeatAndFlanking(folderName, mummerLink):
+def defineRepeatAndFlanking(folderName, mummerLink,contigFilename,contigReadGraph,repeatFilename,repeatSpec ):
     '''
     Input : 
 V        a) String graph : G                
@@ -952,22 +957,25 @@ V        3. Find associated reads by graph operations
     '''
     
     print "defineRepeatAndFlanking: "
+
+
+    
     
     # 0. Load previous data
     G = commonLib.seqGraph(0)
-    G.loadFromFile(folderName, "phaseStringGraph1")
+    G.loadFromFile(folderName, contigReadGraph)
     Grev = formReverseGraph(G)
     
-    json_data = open(folderName + 'phaseRepeat.txt', 'r')
+    json_data = open(folderName + repeatFilename, 'r')
     repeatList = json.load(json_data)
     
-    lenDicCC = commonLib.obtainLength(folderName, "improved3_Double.fasta")
+    lenDicCC = commonLib.obtainLength(folderName, contigFilename+"_Double.fasta")
     N1 = len(lenDicCC)
     
     
     print "repeatList: ", repeatList
     print "len(G.graphNodesList)", len(G.graphNodesList)
-    
+     
     bigDumpList = []
     
     print "len(repeatList)", len(repeatList) , repeatList
@@ -978,32 +986,25 @@ V        3. Find associated reads by graph operations
         for eachitem in r[1]:
             rOut.append(eachitem / 2)
         
-        if len(rIn) == 2 and len(rOut) == 2:
+        if ( len(rIn) == 2 and len(rOut) == 2) or (len(rIn) == 1 and len(rOut) == 1):
             print rIn, rOut
-        
+            if  (len(rIn) == 1 and len(rOut) == 1):
+                rIn = [rIn[0], rIn[0]]
+                rOut = [rOut[0], rOut[0]]
+            
             # 1. Records reachable indices
             kkIn , kkOut = [], []
-            '''
-            for eachnext in G.graphNodesList[4].listOfNextNodes:
-                print 4, eachnext
-                kkIn.append(eachnext[0])
-
-            for eachprev in G.graphNodesList[6].listOfPrevNodes:
-                print 6, eachprev
-                kkOut.append(eachprev[0])
-                
-            print set(kkIn).intersection(set(kkOut))
-           
-            print  len( G.graphNodesList[0].listOfNextNodes), len( G.graphNodesList[2].listOfNextNodes)
-            print  len( G.graphNodesList[1].listOfPrevNodes), len( G.graphNodesList[3].listOfPrevNodes)
+            for eachkk in rIn:
+                kkIn.append(str(eachkk)+"_"+"in")
             
-            print  len( Grev.graphNodesList[0].listOfPrevNodes), len( Grev.graphNodesList[2].listOfPrevNodes)
-            print  len( Grev.graphNodesList[1].listOfNextNodes), len( Grev.graphNodesList[3].listOfNextNodes)
-           ''' 
-            markReachableIndices(G, Grev, rIn, rOut, N1)
+            for eachkk in rOut:
+                kkOut.append(str(eachkk)+"_"+"out")
+                
+            
+            markReachableIndices(G, Grev, kkIn, kkOut, N1)
             
             # 2. Marks inside nodes
-            singleMissList, allPassList = markInsideNodes(G, rIn, rOut)
+            singleMissList, allPassList = markInsideNodes(G, kkIn, kkOut)
             for i in range(4): 
                 print "len(singleMissList[i]), len(allPassList)", len(singleMissList[i]), len(allPassList)
 
@@ -1014,7 +1015,7 @@ V        3. Find associated reads by graph operations
             # 4. Find repeat interior by shortest path joining S/E
             repeatPathway = markInterior(G , myStartIndex, myEndIndex, N1)
             print "repeatPathway", repeatPathway
-            checkPathLength(repeatPathway, G, N1, folderName)
+            #checkPathLength(repeatPathway, G, N1, folderName)
             
             # 5. Find flanking region by shortest path search again
             flankingPathsList = markFlankingRegion(G, rIn, rOut, myStartIndex, myEndIndex, N1)
@@ -1031,10 +1032,13 @@ V        3. Find associated reads by graph operations
                 print len(eachlist), len(repeatList)
             
             bigDumpList.append([flankingList, repeatList, repeatPathway, flankingPathsList])
-            
-            
+        
+
+     
+
+
     # 7. Format return and move on to the phasing 
-    with open(folderName + 'repeatSpecification.txt', 'w') as outfile:
+    with open(folderName + repeatSpec, 'w') as outfile:
         json.dump(bigDumpList, outfile)
 
     
@@ -1107,24 +1111,27 @@ def performPhasing(folderName, mummerLink):
     json_data = open(folderName + 'toPhaseList.txt', 'r')
     toPhaseList = json.load(json_data)
     
-    outputResults(folderName,mummerLink, toPhaseList, N1, G)
+    outputResults(folderName, mummerLink, toPhaseList, N1, G)
     
 def mainFlow(folderName="SampleTest2/", mummerLink="MUMmer3.23/"):
     print "Hello world"
-    getAllAssociatedReads(folderName, mummerLink)
-    formReadContigStringGraph(folderName, mummerLink)
-    identifyRepeat(folderName, mummerLink)
-    defineRepeatAndFlanking(folderName, mummerLink)
+    
+    contigFilename = "improved3"
+    readsetFilename = "phasingSeedName"
+    optTypeFileHeader = "phaseString"
+    contigReadGraph = "phaseStringGraph1"
+    repeatFilename = "phaseRepeat.txt"
+    repeatSpec = "repeatSpecification.txt"
+    
+    optionToRun = "xphase"
+    
+    getAllAssociatedReads(folderName, mummerLink,readsetFilename)
+    formReadContigStringGraph(folderName, mummerLink,contigFilename, readsetFilename, optTypeFileHeader , contigReadGraph )
+    identifyRepeat(folderName, mummerLink,contigFilename,contigReadGraph, repeatFilename, optionToRun )
+    defineRepeatAndFlanking(folderName, mummerLink,contigFilename,contigReadGraph,repeatFilename,repeatSpec )
     performPhasing(folderName, mummerLink)
 
-t0 = time.time()
-print 'Number of arguments:', len(sys.argv), 'arguments.'
-print 'Argument List:', str(sys.argv)
-print os.path.abspath(os.path.dirname(sys.argv[0]))  
-folderName = sys.argv[1]
-mummerLink = sys.argv[2]
 
 
-mainFlow(folderName, mummerLink)
-print  "Time", time.time() - t0
-# mainFlow()    
+
+# mainFlow()  
