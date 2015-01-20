@@ -3,6 +3,8 @@ from itertools import groupby
 from operator import itemgetter
 import sys
 import time
+import argparse
+
 
 ###################################################### Helper Functions 
 def extractMumData(folderName, fileName):
@@ -164,13 +166,95 @@ def transformCoor(dataList):
     return newList
 
 
-def useMummerAlign(mummerLink, folderName, outputName, referenceName, queryName):
-    command = mummerLink + "nucmer --maxmatch -p " + folderName + outputName + " " + folderName + referenceName + " " + folderName + queryName
-    os.system(command)
-    
-    command = mummerLink + "show-coords -r " + folderName + outputName + ".delta > " + folderName + outputName + "Out"
-    os.system(command)
 
+def zeropadding(i):
+    tmpi = ""
+
+    if i < 10:
+        tmpi = "0" + str(i)
+    else:
+        tmpi = str(i)
+    return tmpi
+
+
+
+def useMummerAlign(mummerLink, folderName, outputName, referenceName, queryName, specialForRaw = False, specialName = ""):
+    if not globalLarge:
+        if not specialForRaw:
+            if globalFast:
+                command = mummerLink + "nucmer -b 50  --maxmatch -p " + folderName + outputName + " " + folderName + referenceName + " " + folderName + queryName
+            else:
+                command = mummerLink + "nucmer --maxmatch -p " + folderName + outputName + " " + folderName + referenceName + " " + folderName + queryName
+        else:
+            if globalFast:
+                command = mummerLink + "nucmer -b 50  --maxmatch -p " + folderName + outputName + " " + folderName + referenceName + " " +  queryName
+            else:
+                command = mummerLink + "nucmer --maxmatch -p " + folderName + outputName + " " + folderName + referenceName + " " +  queryName
+                
+        os.system(command)
+        
+        if not specialForRaw:
+            command = mummerLink + "show-coords -r " + folderName + outputName + ".delta > " + folderName + outputName + "Out"
+        else:
+            command = mummerLink + "show-coords -r " + folderName + outputName + ".delta > " + folderName + specialName 
+            
+        os.system(command)
+    else:
+  
+        
+        
+        
+        '''
+        a) Split
+        b) align several times
+        c) join the query
+        raw_reads.part-01
+        '''
+        
+        numberOfFiles = 10
+        bindir =  os.path.abspath(os.path.dirname(sys.argv[0]))   
+        command = bindir + "/fasta-splitter.pl --n-parts " + str(numberOfFiles) + " " + folderName + referenceName
+        os.system(command)
+        
+        if specialForRaw : 
+            queryNameMod = queryName
+        else:
+            queryNameMod = folderName + queryName
+            
+        command = bindir + "/fasta-splitter.pl --n-parts " + str(numberOfFiles) + " " + queryNameMod
+        os.system(command)
+        
+        
+        for i in range(1, numberOfFiles+1):
+            for j in range(1, numberOfFiles+1):
+                if specialForRaw : 
+                    tmpRefName , tmpQryName = referenceName[0:-6] + ".part-" + zeropadding(i) +".fasta",  queryName[0:-6] + "-" + zeropadding(j) + ".fasta"
+                else:
+                    tmpRefName , tmpQryName = referenceName[0:-6] + ".part-" + zeropadding(i) +".fasta",  queryName[0:-6] + ".part-" + zeropadding(j) + ".fasta"
+                    
+                command = mummerLink + "nucmer --maxmatch -p " + folderName + outputName +zeropadding(i)+zeropadding(j) + " " +  tmpRefName + " " + tmpQryName
+                os.system(command) 
+                
+                
+        if not specialForRaw:
+            outNameMod =  folderName + outputName + "Out"
+        else:
+            outNameMod = folderName + specialName 
+
+
+        tmpName = folderName + outputName +zeropadding(1)+zeropadding(1) + ".delta"
+
+        command = mummerLink + "show-coords -r " + tmpName + "| head -5 > " + outNameMod
+        os.system(command)
+        
+        for i in range(1, numberOfFiles+1):
+            for j in range(1, numberOfFiles+1):
+                
+                tmpName = folderName + outputName +zeropadding(i)+zeropadding(j) + ".delta"
+                command = mummerLink + "show-coords -r " + tmpName + "| tail -n+6 >> " + outNameMod
+                os.system(command)
+
+        
 
 def writeToFile_Double1(folderName, fileName1, fileName2, option="contig"):
 
@@ -794,12 +878,16 @@ def formRelatedReadsFile(folderName, mummerLink):
             indexOfMum = str(dummyI)
         
         if True:
+            useMummerAlign(mummerLink, folderName, "out", "improvedTrunc.fasta", "raw_reads.part-" + indexOfMum + ".fasta", True, "fromMum" + indexOfMum )
+            
+            '''
             command = mummerLink + "nucmer --maxmatch --nosimplify -p " + folderName + "out " + folderName + "improvedTrunc.fasta raw_reads.part-" + indexOfMum + ".fasta"
             os.system(command)
     
             command = mummerLink + "show-coords -r " + folderName + "out.delta > " + folderName + "fromMum" + indexOfMum
             os.system(command)
-        
+            '''
+            
         f = open(folderName + "fromMum" + indexOfMum, 'r')
     
         for i in range(6):
@@ -967,11 +1055,15 @@ def extractEdgeSet(folderName, mummerLink, option="nopolish"):
             indexOfMum = str(dummyI)
 
         if True:
+            useMummerAlign(mummerLink, folderName, "outRefine", "smaller_improvedContig.fasta", "relatedReads_Double.part-" + indexOfMum + ".fasta", True,  "fromMumRefine" + indexOfMum)
+            
+            '''
             command = mummerLink + "nucmer --maxmatch --simplify -p " + folderName + "outRefine " + folderName + "smaller_improvedContig.fasta " + "relatedReads_Double.part-" + indexOfMum + ".fasta"
             os.system(command)
             
             command = mummerLink + "show-coords -r " + folderName + "outRefine.delta > " + folderName + "fromMumRefine" + indexOfMum
             os.system(command)
+            '''
             
         f = open(folderName + "fromMumRefine" + indexOfMum, 'r')
         for i in range(6):
@@ -1916,6 +2008,7 @@ def fillGap(folderName , mummerLink):
     os.system("rm relatedReads_Double.part*")
 
 
+
     
 
 
@@ -1926,34 +2019,125 @@ def compareWithReference(folderName , mummerLink):
     quastEvaluate(folderName, "quast-2.3/", originalName="contigs.fasta", improvedNameList=["noEmbed.fasta", "improved.fasta", "improved2.fasta", "improved3.fasta"] , referenceName="reference.fasta")
     # quastEvaluate(folderName, "quast-2.3/", originalName = "contigs.fasta", improvedNameList= ["noEmbed.fasta", "improved.fasta"] , referenceName= "reference.fasta" )
     
+
+
+def performMapping(folderName, mummerLink, mapcontigsname):
+    print "performMapping"
+    info = mapcontigsname.split("_")
     
+    oldRef, newRef = info[0], info[1]
+    print oldRef, newRef
+    command = mummerLink + "nucmer --maxmatch --nosimplify  -p " + folderName + "outMapper " + folderName + newRef + " " + folderName + oldRef
+    os.system(command)
+    
+    command = mummerLink + "show-tiling -v 50 -g 50000 -c " + folderName + "outMapper.delta > " + folderName + "mappingResults.txt"
+    os.system(command)
+    
+    command = "more " + folderName + "mappingResults.txt"
+    os.system(command)
+
+    
+
      
 
 ###################################################### Starting point
-def mainFlow(folderName , mummerLink):      
+def mainFlow(folderName , mummerLink, pickupname, mapcontigsname):      
     print "Go Bears! ! !" 
     
-    removeEmbedded(folderName , mummerLink)
-    fetchSuccessor(folderName , mummerLink)
-    formSeqGraph(folderName , mummerLink)
-    fillGap(folderName , mummerLink)
+    print "pickupname, mapcontigsname", pickupname, mapcontigsname
     
+    
+    if not pickupname in ["noEmbed.fasta", "improved.fasta", "improved2.fasta"]:
+        removeEmbedded(folderName , mummerLink)
+    
+    if not pickupname in ["improved.fasta", "improved2.fasta"]:
+        fetchSuccessor(folderName , mummerLink)
+        formSeqGraph(folderName , mummerLink)
+        
+    if not pickupname in ["improved2.fasta"]:
+        fillGap(folderName , mummerLink)
+
     xPhased(folderName , mummerLink)
+    
+    os.system("rm *.part*")
+    
+    
     # ECReduction(folderName , mummerLink )
     # compareWithReference(folderName , mummerLink)
     
+    if mapcontigsname != None:
+        performMapping(folderName, mummerLink, mapcontigsname)
+        
     print "<3 Do cool things that matter <3"
+
+def checkingPath(folderName, mummerLink):
+    
+    pathExists = True
+    newFolderName, newMummerLink = "", ""
+    
+    if folderName[-1] == "/":
+        newFolderName = folderName
+    else:
+        newFolderName = folderName + "/" 
+    
+    if mummerLink[-1] == "/":
+        newMummerLink = mummerLink
+    else:
+        newMummerLink = mummerLink + "/" 
+    
+    if not os.path.isdir(newFolderName):
+        pathExists = False
+        print "Not exists : " + newFolderName
+    
+    if not os.path.isdir(newMummerLink):
+        pathExists = False
+        print "Not exists : " + newMummerLink
+    
+    if not os.path.exists(newFolderName + "contigs.fasta"):
+        pathExists = False
+        print "Not exists : " + newFolderName + "contigs.fasta"
+    
+    if not os.path.exists(newFolderName + "raw_reads.fasta"):
+        pathExists = False
+        print "Not exists : " + newFolderName + "raw_reads.fasta"
+    
+    
+    return pathExists, newFolderName, newMummerLink
      
 # folderName = "S_cerivisea/"
 # mummerLink = "MUMmer3.23/"
 
 t0 = time.time()
-print 'Number of arguments:', len(sys.argv), 'arguments.'
-print 'Argument List:', str(sys.argv)
-print os.path.abspath(os.path.dirname(sys.argv[0]))  
-folderName = sys.argv[1]
-mummerLink = sys.argv[2]
+
+parser = argparse.ArgumentParser(description='FinisherSC : a repeat-aware tool to upgrade de-novo assembly with long reads')
+parser.add_argument('folderName')
+parser.add_argument('mummerLink')
+parser.add_argument('-p', '--pickup', help='Picks up existing work (input is noEmbed.fasta, improved.fasta or improved2.fasta)', required=False)
+parser.add_argument('-o', '--mapcontigs', help='Maps new contigs to old contigs(input is of the format of contigs.fasta_improved3.fasta which means improved3.fasta will be mapped back to contigs.fasta; Output can be found in mappingResults.txt in the destinedFolder;)', required=False)
+parser.add_argument('-f', '--fast', help= 'Fast aligns contigs (input is True)', required=False)
+parser.add_argument('-l', '--large', help= 'Large number of contigs/large size of contigs (input is True)', required=False)
 
 
-mainFlow(folderName, mummerLink)
+args = vars(parser.parse_args())
+
+print "args", args
+pathExists, newFolderName, newMummerLink = checkingPath(args['folderName'], args['mummerLink'])
+
+if args['fast'] == "True":
+    globalFast = True
+else:
+    globalFast = False
+    
+if args['large'] == "True":
+    globalLarge = True
+else:
+    globalLarge = False
+    
+
+
+if pathExists:
+    mainFlow(newFolderName, newMummerLink, args['pickup'], args['mapcontigs'])
+else:
+    print "Sorry. The above folders or files are missing. If you continue to have problems, please contact me(Ka-Kit Lam) at kklam@eecs.berkeley.edu"
+
 print  "Time", time.time() - t0
