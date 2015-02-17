@@ -53,7 +53,7 @@ f)Help. You can always use -h to get the usage suggestion.
 
 g)Parallel mode. You can now use -par 20 to run finisherSC on 20 threads. The command is 
         
-        python finisherSC.py -par 20 destinedFolder mummerPath
+	python finisherSC.py -par 20 destinedFolder mummerPath
 
 ## Data files for experiments ##
 We are using the benchmark datasets available online in PacBio DevNet. And we can run FinisherSC to process those data to completion. For (1) -(3), we use -par 20 option and run it on a server computer. For (4), we run them on a laptop. 
