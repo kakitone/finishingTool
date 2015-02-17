@@ -1,9 +1,9 @@
-finishingTool
+FinisherSC
 =============
 If you encounter any issue, please feel free to directly contact me at kklam@eecs.berkeley.edu
 My name is  Ka-Kit Lam. 
 
-Our paper is located at http://biorxiv.org/content/early/2014/10/14/010215 
+Our paper is located at http://biorxiv.org/content/early/2014/11/03/010215
 
 ## Command to run the tool ##
 
@@ -50,6 +50,12 @@ e) There is also an experimental improvement resolving tandem repeat. The furthe
 f)Help. You can always use -h to get the usage suggestion. 
 
 	python finisherSC.py -h
+
+g)Parallel mode. You can now use -par 20 to run finisherSC on 20 threads. The command is 
+        
+        python finisherSC.py -par 20 destinedFolder mummerPath
+
+## Data files for experiments ##
 
 
 ## Remarks ##
