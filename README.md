@@ -56,7 +56,7 @@ g)Parallel mode. You can now use -par 20 to run finisherSC on 20 threads. The co
 	python finisherSC.py -par 20 destinedFolder mummerPath
 
 ## Data files for experiments ##
-We are using the benchmark datasets available online in PacBio DevNet. And we can run FinisherSC to process those data to completion. For (1) -(3), we use -par 20 option and run it on a server computer. For (4), we run them on a laptop. 
+We are using the benchmark datasets available online in PacBio DevNet. And we can run FinisherSC to process those data to completion. For (1, 2, 3), we use -par 20 option and run it on a server computer and we get them finished in a couple of hours to a day. For (4), we run without any options on a laptop and get it finished in a couple minutes. 
   
 1. Drosophila : https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly 
 2. Saccharomyces cerevisiae W303 : https://github.com/PacificBiosciences/DevNet/wiki/Saccharomyces-cerevisiae-W303-Assembly-Contigs
