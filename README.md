@@ -11,6 +11,10 @@ Here is the command to run the tool:
 
 	python finisherSC.py destinedFolder mummerPath
 	
+If you are running on server computer and would like to use multiple threads, then the following commands can generate 20 threads to run FinisherSC. 
+
+	python finisherSC.py -par 20 destinedFolder mummerPath
+
 ## Input and output files ##
 
 Note that it is assumed that you have "contigs.fasta" , "raw_reads.fasta" in the destinedFolder and mummerPath is your path to Mummer. Therefore, please rename the files in the destinedFolder if needed. For "finisherSC.py", the key output file is **improved3.fasta** in destinedFolder. 
