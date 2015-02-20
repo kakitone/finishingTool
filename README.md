@@ -28,31 +28,31 @@ Here is an example run with the pre-installed data files and softwares(e.g. Mumm
 3. If you want to visualize the output against the reference, you can use software like Gepard.
 
 ## Options ##
-a)Fast mode [-f True] (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): 
+a)Fast mode \[ -f True \] (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): 
 
 	python finisherSC.py destinedFolder mummerPath -f True 
 [It means that you want to use the fast mode ]
 
-b)Parallel mode. [-par numberOfThreads] You can now use -par 20 to run finisherSC on 20 threads. The command is 
+b)Parallel mode. \[-par numberOfThreads\] You can now use -par 20 to run finisherSC on 20 threads. The command is 
         
 	python finisherSC.py -par 20 destinedFolder mummerPath
 
 
-c)Break down large contig file [-l True]. If your contigs.fasta is too big, then you want to use this option to break it down for alignment. 
+c)Break down large contig file \[-l True\]. If your contigs.fasta is too big, then you want to use this option to break it down for alignment. 
 
 	python finisherSC.py -l True destinedFolder mummerPath
 
 
-d)Pick from previous jobs [-p pickupFilename] (e.g. you have got improved2.fasta but the cluster node timeout and you want to start from improved2.fasta instead of from scratch)
+d)Pick from previous jobs \[-p pickupFilename\] (e.g. you have got improved2.fasta but the cluster node timeout and you want to start from improved2.fasta instead of from scratch)
 
 	python finisherSC.py destinedFolder mummerPath  -p improved2.fasta
 
-e)Mapping between old contigs and new contigs [-o referenceName_QueryName](e.g. you want to know how the contigs from contigs.fasta are mapped to improved3.fasta )
+e)Mapping between old contigs and new contigs \[-o referenceName_QueryName \](e.g. you want to know how the contigs from contigs.fasta are mapped to improved3.fasta )
 
 	python finisherSC.py destinedFolder mummerPath -o contigs.fasta_improved3.fasta
 [It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]
 
-f)Help [-h]. You can always use -h to get the usage suggestion. 
+f)Help \[-h\]. You can always use -h to get the usage suggestion. 
 
 	python finisherSC.py -h
 
