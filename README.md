@@ -74,6 +74,21 @@ We are using the benchmark datasets available online in PacBio DevNet. And we ca
 3. C. elegans : https://github.com/PacificBiosciences/DevNet/wiki/C.-elegans-data-set
 4. E. coli, M. ruber and P. heparinus : http://files.pacb.com/software/hgap/index.html
 
+The data are supported by the original authors. But we provide an example on how to download and transform data types so it is easier for users to validate FinisherSC on benchmark data . 
+
+1. Download data with links specified in file_list
+
+	for f in `cat file_list`; do wget --force-directories $f; done 
+	
+2. Download the DEXTRACTOR
+
+	git clone https://github.com/thegenemyers/DEXTRACTOR.git
+	
+3. Transform .bax.h5 files to .fasta file
+	
+	find . -name '*.bax.h5' | xargs DEXTRACTOR/dextract  > raw_reads.fasta
+
+
 
 ## Remarks ##
 1. After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs( i.e. improved3.fasta )
