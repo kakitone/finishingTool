@@ -40,12 +40,12 @@
       </nav>
       <section>
         <h1>
-<a id="finishingtool" class="anchor" href="#finishingtool" aria-hidden="true"><span class="octicon octicon-link"></span></a>finishingTool</h1>
+<a id="finishersc" class="anchor" href="#finishersc" aria-hidden="true"><span class="octicon octicon-link"></span></a>FinisherSC</h1>
 
 <p>If you encounter any issue, please feel free to directly contact me at <a href="mailto:kklam@eecs.berkeley.edu">kklam@eecs.berkeley.edu</a>
 My name is  Ka-Kit Lam. </p>
 
-<p>Our paper is located at <a href="http://biorxiv.org/content/early/2014/10/14/010215">http://biorxiv.org/content/early/2014/10/14/010215</a> </p>
+<p>Our paper is located at <a href="http://biorxiv.org/content/early/2014/11/03/010215">http://biorxiv.org/content/early/2014/11/03/010215</a></p>
 
 <h2>
 <a id="command-to-run-the-tool" class="anchor" href="#command-to-run-the-tool" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command to run the tool</h2>
@@ -53,6 +53,11 @@ My name is  Ka-Kit Lam. </p>
 <p>Here is the command to run the tool:</p>
 
 <pre><code>python finisherSC.py destinedFolder mummerPath
+</code></pre>
+
+<p>If you are running on server computer and would like to use multiple threads, then the following commands can generate 20 threads to run FinisherSC. </p>
+
+<pre><code>python finisherSC.py -par 20 destinedFolder mummerPath
 </code></pre>
 
 <h2>
@@ -107,6 +112,26 @@ My name is  Ka-Kit Lam. </p>
 
 <pre><code>python finisherSC.py -h
 </code></pre>
+
+<p>g)Parallel mode. You can now use -par 20 to run finisherSC on 20 threads. The command is </p>
+
+<pre><code>python finisherSC.py -par 20 destinedFolder mummerPath
+</code></pre>
+
+<h2>
+<a id="data-files-for-experiments" class="anchor" href="#data-files-for-experiments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data files for experiments</h2>
+
+<p>We are using the benchmark datasets available online in PacBio DevNet. And we can run FinisherSC to process those data to completion. For (1, 2, 3), we use -par 20 option and run it on a server computer and we get them finished in a couple of hours to a day. For (4), we run without any options on a laptop and get it finished in a couple of minutes. </p>
+
+<ol>
+<li>Drosophila : <a href="https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly">https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly</a> </li>
+<li>Saccharomyces cerevisiae W303 : <a href="https://github.com/PacificBiosciences/DevNet/wiki/Saccharomyces-cerevisiae-W303-Assembly-Contigs">https://github.com/PacificBiosciences/DevNet/wiki/Saccharomyces-cerevisiae-W303-Assembly-Contigs</a>
+</li>
+<li>C. elegans : <a href="https://github.com/PacificBiosciences/DevNet/wiki/C.-elegans-data-set">https://github.com/PacificBiosciences/DevNet/wiki/C.-elegans-data-set</a>
+</li>
+<li>E. coli, M. ruber and P. heparinus : <a href="http://files.pacb.com/software/hgap/index.html">http://files.pacb.com/software/hgap/index.html</a>
+</li>
+</ol>
 
 <h2>
 <a id="remarks" class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
