@@ -78,15 +78,15 @@ The data are supported by the original authors. But we provide an example on how
 
 1. Download data with links specified in file_list
 
-	for f in `cat file_list`; do wget --force-directories $f; done 
+        for f in `cat file_list`; do wget --force-directories $f; done 
 	
 2. Download the DEXTRACTOR
 
-	git clone https://github.com/thegenemyers/DEXTRACTOR.git
+        git clone https://github.com/thegenemyers/DEXTRACTOR.git
 	
 3. Transform .bax.h5 files to .fasta file
 	
-	find . -name '*.bax.h5' | xargs DEXTRACTOR/dextract  > raw_reads.fasta
+        find . -name '*.bax.h5' | xargs DEXTRACTOR/dextract  > raw_reads.fasta
 
 
 
