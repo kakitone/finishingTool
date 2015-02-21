@@ -94,5 +94,38 @@ The data are supported by the original authors. But we provide an example on how
 1. After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs( i.e. improved3.fasta )
 2. If you have problem running scipy.weave, try to remove ~/.python27_compiled 
 
+## Annotation of FinisherSC ##
+Main functional components of FinisherSC : 
+
+	finisherSC.py : Starting point of FinisherSC
+	
+	nonRedundantResolver.py : Filter completely embedded contigs (aka Subroutine 1 in the paper's supplementary material)
+	
+	overlapResolver.py : Utilize existing overlaps of contigs to resolve repeats and merge contigs (aka Subroutine 2,3 in the paper's supplementary material)
+	
+	gapFiller.py : Utilize raw reads data to fill gaps(aka Subroutine 4, 5 in the paper's supplementary material)
+	
+	twoRepeatOneBridgeSolver.py : Resolve repeats with two copies where only one copy is spanned by some reads (aka Subroutine 6,7 in the paper's supplementary material)
+
+Helper Functions :
+
+	IORobot.py : various functions that support reading and writing of data
+
+	alignerRobot.py : library containing ways to parse MUMmer results
+
+	houseKeeper.py : various functions to support house keeping of data
+
+	graphLib.py : library containing various graph string graph operations 
+
+	debugging.py : a debugging point for hacking into various functions 
+
+	unittester.py : integration test package
+
+	viewer.py : create dot plots 
+
+
+An older version of the tool (no longer supported) : 
+
+	finisher.py : an independent and functioning(but no longer supported) version based on a greedy algorithm
 
 
