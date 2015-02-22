@@ -128,4 +128,14 @@ An older version of the tool (no longer supported) :
 
 > finisher.py : an independent and functioning(but no longer supported) version based on a greedy algorithm
 
+Relevant third parties software: 
 
+> fasta-splitter.pl : a tool to break FASTA file into smaller trucks in commandline
+
+> MUMmer : an alignment tool to perform the mapping of reads and contigs
+
+> gepard-1.30 : a good tool to create dotplots
+
+Experimental folder: 
+
+> There are various experimental functions there. The two important ones are tandem repeat resolver(tSolver.py) and approximate repeat phaser(xPhaser.py). 
