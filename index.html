@@ -174,38 +174,57 @@ My name is  Ka-Kit Lam. </p>
 
 <p>Main functional components of FinisherSC : </p>
 
-<pre><code>finisherSC.py : Starting point of FinisherSC
+<blockquote>
+<p>finisherSC.py : Starting point of FinisherSC</p>
 
-nonRedundantResolver.py : Filter completely embedded contigs (aka Subroutine 1 in the paper's supplementary material)
+<p>nonRedundantResolver.py : Filter completely embedded contigs (aka Subroutine 1 in the paper's supplementary material)</p>
 
-overlapResolver.py : Utilize existing overlaps of contigs to resolve repeats and merge contigs (aka Subroutine 2,3 in the paper's supplementary material)
+<p>overlapResolver.py : Utilize existing overlaps of contigs to resolve repeats and merge contigs (aka Subroutine 2,3 in the paper's supplementary material)</p>
 
-gapFiller.py : Utilize raw reads data to fill gaps(aka Subroutine 4, 5 in the paper's supplementary material)
+<p>gapFiller.py : Utilize raw reads data to fill gaps(aka Subroutine 4, 5 in the paper's supplementary material)</p>
 
-twoRepeatOneBridgeSolver.py : Resolve repeats with two copies where only one copy is spanned by some reads (aka Subroutine 6,7 in the paper's supplementary material)
-</code></pre>
+<p>twoRepeatOneBridgeSolver.py : Resolve repeats with two copies where only one copy is spanned by some reads (aka Subroutine 6,7 in the paper's supplementary material)</p>
+</blockquote>
 
 <p>Helper Functions :</p>
 
-<pre><code>IORobot.py : various functions that support reading and writing of data
+<blockquote>
+<p>IORobot.py : various functions that support reading and writing of data</p>
 
-alignerRobot.py : library containing ways to parse MUMmer results
+<p>alignerRobot.py : library containing ways to parse MUMmer results</p>
 
-houseKeeper.py : various functions to support house keeping of data
+<p>houseKeeper.py : various functions to support house keeping of data</p>
 
-graphLib.py : library containing various graph string graph operations 
+<p>graphLib.py : library containing various graph string graph operations </p>
 
-debugging.py : a debugging point for hacking into various functions 
+<p>debugging.py : a debugging point for hacking into various functions </p>
 
-unittester.py : integration test package
+<p>unittester.py : integration test package</p>
 
-viewer.py : create dot plots 
-</code></pre>
+<p>viewer.py : create dot plots </p>
+</blockquote>
 
 <p>An older version of the tool (no longer supported) : </p>
 
-<pre><code>finisher.py : an independent and functioning(but no longer supported) version based on a greedy algorithm
-</code></pre>
+<blockquote>
+<p>finisher.py : an independent and functioning(but no longer supported) version based on a greedy algorithm</p>
+</blockquote>
+
+<p>Relevant third parties software: </p>
+
+<blockquote>
+<p>fasta-splitter.pl : a tool to break FASTA file into smaller trucks in commandline</p>
+
+<p>MUMmer : an alignment tool to perform the mapping of reads and contigs</p>
+
+<p>gepard-1.30 : a good tool to create dotplots</p>
+</blockquote>
+
+<p>Experimental folder: </p>
+
+<blockquote>
+<p>There are various experimental functions there. The two important ones are tandem repeat resolver(tSolver.py) and approximate repeat phaser(xPhaser.py). </p>
+</blockquote>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/kakitone">kakitone</a></p>
