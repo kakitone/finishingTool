@@ -1,7 +1,7 @@
 FinisherSC
 =============
 
-## Introduction and contact point##
+## Introduction and contact ##
 If you encounter any issue, please feel free to directly contact me at kklam@eecs.berkeley.edu
 My name is  Ka-Kit Lam. 
 
