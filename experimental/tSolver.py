@@ -1,17 +1,16 @@
 import tandemRepeatSolver
-import sys
+
 import time
-import os
-#folderName = "../dataFolders/"
-#mummerPath = "MUMmer3.23/"
+import argparse
 
 t0 = time.time()
-print 'Number of arguments:', len(sys.argv), 'arguments.'
-print 'Argument List:', str(sys.argv)
-print os.path.abspath(os.path.dirname(sys.argv[0]))  
-folderName = sys.argv[1]
-mummerLink = sys.argv[2]
 
+parser = argparse.ArgumentParser(description='tSolver')
+parser.add_argument('folderName')
+parser.add_argument('mummerLink')
 
-tandemRepeatSolver.mainFlowForTandemResolve(folderName, mummerLink)
+args = vars(parser.parse_args())
+print "args", args
+tandemRepeatSolver.mainFlowForTandemResolve(args['folderName'] , args['mummerLink'])
 print  "Time", time.time() - t0
+

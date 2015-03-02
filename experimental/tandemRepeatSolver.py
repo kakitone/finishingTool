@@ -1,8 +1,19 @@
-import commonLib
-import newPhasing
+
+
 import json
 from itertools import groupby
 from operator import itemgetter
+
+from finisherSCCoreLib import IORobot
+from finisherSCCoreLib import graphLib
+from finisherSCCoreLib import alignerRobot
+import associatedReadFinder
+import readContigGraphFormer
+import repeatFinder
+
+import repeatFlankingDefiner
+import abunHouseKeeper
+
 
 '''
 Interface : 
@@ -25,7 +36,7 @@ Interface :
     
 def colorNodes(folderName, mummerPath,sourceFilename, contigFilename, readsetFilename):
     print "colorNodes"
-    lenDic = commonLib.obtainLength(folderName, sourceFilename+".fasta")
+    lenDic = IORobot.obtainLength(folderName, sourceFilename+".fasta")
     print lenDic
     thresForShort = 15000
     shortList = []
@@ -36,19 +47,32 @@ def colorNodes(folderName, mummerPath,sourceFilename, contigFilename, readsetFil
         else:
             shortList.append(eachitem)
     
-    commonLib.putListToFileO(folderName, sourceFilename+".fasta", contigFilename, longList)
-    commonLib.putListToFileO(folderName, sourceFilename+".fasta", readsetFilename, shortList)
+    IORobot.putListToFileO(folderName, sourceFilename+".fasta", contigFilename, longList)
+    IORobot.putListToFileO(folderName, sourceFilename+".fasta", readsetFilename, shortList)
     
     
 def skeletonIdentification(folderName, mummerLink, contigFilename, readsetFilename, optTypeFileHeader, contigReadGraph , repeatFilename, repeatSpec, optionToRun):
     print "skeletonIdentification"
-    # newPhasing.getAllAssociatedReads(folderName, mummerLink,readsetFilename)
-    # newPhasing.formReadContigStringGraph(folderName, mummerLink, contigFilename, readsetFilename, optTypeFileHeader , contigReadGraph)
-    # newPhasing.identifyRepeat(folderName, mummerLink, contigFilename, contigReadGraph, repeatFilename, optionToRun)
-    newPhasing.defineRepeatAndFlanking(folderName, mummerLink, contigFilename, contigReadGraph, repeatFilename, repeatSpec)
+    associatedReadFinder.getAllAssociatedReads(folderName, mummerLink,readsetFilename)
+    readContigGraphFormer.formReadContigStringGraph(folderName, mummerLink, contigFilename, readsetFilename, optTypeFileHeader , contigReadGraph)
+    repeatFinder.identifyRepeat(folderName, mummerLink, contigFilename, contigReadGraph, repeatFilename, optionToRun)
+    repeatFlankingDefiner.defineRepeatAndFlanking(folderName, mummerLink, contigFilename, contigReadGraph, repeatFilename, repeatSpec)
 
+def findCoverageFromRawData(folderName):
+    contigLenDic  = IORobot.obtainLength(folderName, "contigs.fasta")
+    readLenDic = IORobot.obtainLength(folderName, "raw_reads.fasta")
 
-
+    G = 0 
+    NL = 0 
+    for eachitem in contigLenDic:
+        G = G+ contigLenDic[eachitem]
+        
+    for eachitem in readLenDic:
+        NL = NL+ readLenDic[eachitem]
+    
+    c = (NL*1.0)/G 
+    print c 
+    return c 
 def DFSwithPath(G, x , pathList, N1, isTerminate):
     if not isTerminate:
         if x.visited == 0:
@@ -85,9 +109,11 @@ def resolvingTandem(folderName, mummerPath, contigReadGraph,contigFilename, read
     7. Join the contigs
     '''
     # 0 ) Load all the data
-    G = commonLib.seqGraph(0)
+    thres = 5 
+    
+    G = graphLib.seqGraph(0)
     G.loadFromFile(folderName, contigReadGraph)
-    lenDicCC = commonLib.obtainLength(folderName, contigFilename+"_Double.fasta")
+    lenDicCC = IORobot.obtainLength(folderName, contigFilename+"_Double.fasta")
     N1 = len(lenDicCC)
 
     maxDuplicate = 10
@@ -96,26 +122,26 @@ def resolvingTandem(folderName, mummerPath, contigReadGraph,contigFilename, read
     
 
 
-    myContigsDic = commonLib.loadContigsFromFile(folderName, readsetFilename+"_Double.fasta")    
-    lenDicRR = commonLib.obtainLength(folderName, readsetFilename + "_Double.fasta")
+    myContigsDic = IORobot.loadContigsFromFile(folderName, readsetFilename+"_Double.fasta")    
+    lenDicRR = IORobot.obtainLength(folderName, readsetFilename + "_Double.fasta")
     
     header = optTypeFileHeader + "RR"
-    dataListRR = commonLib.extractMumData(folderName, header + "Out")
-    dataListRR = newPhasing.filterData(dataListRR, lenDicRR)
+    dataListRR = alignerRobot.extractMumData(folderName, header + "Out")
+    dataListRR = abunHouseKeeper.filterData(dataListRR, lenDicRR)
     dataListRRDic = {}
     for eachitem in dataListRR: 
-        if eachitem[1] > eachitem[3]:
+        if eachitem[2] < thres:
             dataListRRDic[eachitem[-2] +";"+eachitem[-1]] = eachitem[4]
 
     header = optTypeFileHeader + "CR"
-    lenDicCC = commonLib.obtainLength(folderName, contigFilename + "_Double.fasta")
+    lenDicCC = IORobot.obtainLength(folderName, contigFilename + "_Double.fasta")
     lenDicCR = dict(lenDicCC.items() + lenDicRR.items())
     
-    dataListCR = commonLib.extractMumData(folderName, header + "Out")
-    dataListCR = newPhasing.filterData(dataListCR, lenDicCR)
+    dataListCR = alignerRobot.extractMumData(folderName, header + "Out")
+    dataListCR = abunHouseKeeper.filterData(dataListCR, lenDicCR)
     dataListCRDic = {}
     for eachitem in dataListCR: 
-        if eachitem[1] > eachitem[3]:
+        if eachitem[2] < thres:
             dataListCRDic[eachitem[-2] +";"+eachitem[-1]] = eachitem[4]
 
     print dataListCRDic
@@ -125,8 +151,8 @@ def resolvingTandem(folderName, mummerPath, contigReadGraph,contigFilename, read
     json_data = open(folderName + repeatSpec, 'r')
     loadData = json.load(json_data)
     
-    contigsTmp = commonLib.loadContigsFromFile(folderName, contigFilename+"_Double.fasta")
-    readTmp = commonLib.loadContigsFromFile(folderName, readsetFilename + "_Double.fasta")
+    contigsTmp = IORobot.loadContigsFromFile(folderName, contigFilename+"_Double.fasta")
+    readTmp = IORobot.loadContigsFromFile(folderName, readsetFilename + "_Double.fasta")
 
     happyTandemList = {}
     
@@ -198,22 +224,21 @@ def resolvingTandem(folderName, mummerPath, contigReadGraph,contigFilename, read
                 readName = readName + "d"
             myList.append(readName)
             
-        commonLib.putListToFileO(folderName, readsetFilename+"_Double.fasta", "toAlignReads", myList)
+        IORobot.putListToFileO(folderName, readsetFilename+"_Double.fasta", "toAlignReads", myList)
         
         if True:
-            commonLib.useMummerAlign(mummerPath, folderName,mummerFile , repeatTempFilename, "toAlignReads.fasta")
+            alignerRobot.useMummerAlign(mummerPath, folderName,mummerFile , repeatTempFilename, "toAlignReads.fasta")
         
-        dataList = commonLib.extractMumData(folderName, mummerFile+"Out")
+        dataList = alignerRobot.extractMumData(folderName, mummerFile+"Out")
         
         
         # 5)
         totalBasesMatch = 0
         lrepeat = len(repeatContent)
-        c = 50 # Important parameters : FIX needed in production
+        c = findCoverageFromRawData(folderName)
         
-        #lengthDic = commonLib.obtainLength(folderName, readsetFilename+"_Double.fasta")
         
-        print "dataList[0]", dataList[0]
+        # print "dataList[0]", dataList[0]
         dataList.sort(key = itemgetter(-1))
         for key, values in  groupby(dataList,itemgetter(-1)):
             maxValue = -1
@@ -255,9 +280,9 @@ def resolvingTandem(folderName, mummerPath, contigReadGraph,contigFilename, read
         f1.close()
         
         if True:
-            commonLib.useMummerAlign(mummerPath, folderName,"myFirstOverlap" , repeatTempFilename, "firstOverlap.fasta")
+            alignerRobot.useMummerAlign(mummerPath, folderName,"myFirstOverlap" , repeatTempFilename, "firstOverlap.fasta")
         
-        dataList = commonLib.extractMumData(folderName, "myFirstOverlap"+"Out")
+        dataList = alignerRobot.extractMumData(folderName, "myFirstOverlap"+"Out")
         
         dataList.sort(key = itemgetter(0))
         maxVal = -1
@@ -268,8 +293,12 @@ def resolvingTandem(folderName, mummerPath, contigReadGraph,contigFilename, read
                 maxItm = eachi
         
         print maxItm
-        repeatStart = maxItm[0]
-        contigEnd = maxItm[2]
+        if len(maxItm) > 0 :
+            repeatStart = maxItm[0]
+            contigEnd = maxItm[2]
+        else:
+            repeatStart = 0
+            contigEnd = -1
         # b) format return : prepare the repeat template 
         print "ct*lrepeat", int(repeatStart + ct*lrepeat)
         print "repeatStart", repeatStart
@@ -308,7 +337,7 @@ def resolvingTandem(folderName, mummerPath, contigReadGraph,contigFilename, read
     
     counter = 0
     for eachcontig in contigsTmp:
-        id = newPhasing.parseEdgeNameToID(eachcontig, 'C')
+        id = abunHouseKeeper.parseEdgeNameToID(eachcontig, 'C')
         if checkingList[id/2] == False:
         
             fout.write(">Segkk"+str(counter)+ "\n")
@@ -341,8 +370,11 @@ def mainFlowForTandemResolve(folderName, mummerPath):
     repeatSpec = "tandemRepeatSpecification.txt"
     
     optionToRun = "tandem"
-    colorNodes(folderName, mummerPath, sourceFilename, contigFilename, shortContigFilename)
-    skeletonIdentification(folderName, mummerPath, contigFilename, readsetFilename, optTypeFileHeader, contigReadGraph , repeatFilename, repeatSpec,optionToRun)
+
+    if True:
+        colorNodes(folderName, mummerPath, sourceFilename, contigFilename, shortContigFilename)
+        skeletonIdentification(folderName, mummerPath, contigFilename, readsetFilename, optTypeFileHeader, contigReadGraph , repeatFilename, repeatSpec,optionToRun)
+    
     resolvingTandem(folderName, mummerPath,contigReadGraph,contigFilename,readsetFilename, optTypeFileHeader, repeatSpec)
     
 
