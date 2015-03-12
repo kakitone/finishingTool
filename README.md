@@ -141,3 +141,8 @@ Relevant third parties software:
 Experimental folder: 
 
 > There are various experimental functions there. The two important ones are tandem repeat resolver(tSolver.py) and approximate repeat phaser(xPhaser.py). 
+
+##Current build status##
+It is an indicator on the current built powered by Travis-CI. If you issue a pull request, Travis-CI will evaluate your suggestion by automatically running the code on the default test case. 
+
+![alt text](https://travis-ci.org/kakitone/finishingTool.svg?branch=master "Current build status")
