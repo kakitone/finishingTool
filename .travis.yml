@@ -1,0 +1,15 @@
+language: python
+python:
+  - "2.7"
+  - "2.6"
+# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install: 
+  - wget http://sourceforge.net/projects/mummer/files/mummer/3.23/MUMmer3.23.tar.gz/download -O /tmp/mummer.tar.gz
+  - tar -zxvf /tmp/mummer.tar.gz -C /tmp/
+  - make install -C /tmp/MUMmer3.23/
+  - wget https://www.dropbox.com/sh/zwws7lpvd322z45/AAD1voFVM0Subwm68R05Z7M5a?dl=1 -O /tmp/EcoliTestRun.zip
+  - mkdir /tmp/EcoliTestRun
+  - unzip /tmp/EcoliTestRun.zip contigs.fasta reference.fasta raw_reads.fasta -d /tmp/EcoliTestRun
+# command to run tests, e.g. python setup.py test
+script: 
+  - python onlineTest.py 
