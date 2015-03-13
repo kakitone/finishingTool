@@ -75,6 +75,8 @@ We are using the benchmark datasets available online in PacBio DevNet. And we ca
 2. Saccharomyces cerevisiae W303 : https://github.com/PacificBiosciences/DevNet/wiki/Saccharomyces-cerevisiae-W303-Assembly-Contigs
 3. C. elegans : https://github.com/PacificBiosciences/DevNet/wiki/C.-elegans-data-set
 4. E. coli, M. ruber and P. heparinus : http://files.pacb.com/software/hgap/index.html
+5. Column (a,b) in the main table of the paper : http://www.eecs.berkeley.edu/~kakitone/Ped30xData.zip , http://www.eecs.berkeley.edu/~kakitone/Ped50xData.zip
+ 
 
 The data are supported by the original authors. But we provide an example on how to download and transform data types so it is easier for users to validate FinisherSC on benchmark data . 
 
