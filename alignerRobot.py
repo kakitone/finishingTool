@@ -162,7 +162,6 @@ def useMummerAlignBatch(mummerLink, folderName, workerList, nProc ,specialForRaw
                     else:
                         tmpRefName , tmpQryName = referenceName[0:-6] + ".part-" + zeropadding(i) +".fasta",  queryName[0:-6] + ".part-" + zeropadding(j) + ".fasta"
                     
-                    
                     results.append(p.apply_async(nucmerMummer, args =(specialForRaw, mummerLink, "", folderName + outputName +zeropadding(i)+zeropadding(j), tmpRefName, tmpQryName, refinedVersion)))
       
         
