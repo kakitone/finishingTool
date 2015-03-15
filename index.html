@@ -42,10 +42,13 @@
         <h1>
 <a id="finishersc" class="anchor" href="#finishersc" aria-hidden="true"><span class="octicon octicon-link"></span></a>FinisherSC</h1>
 
+<h2>
+<a id="introduction-and-contact" class="anchor" href="#introduction-and-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction and contact</h2>
+
 <p>If you encounter any issue, please feel free to directly contact me at <a href="mailto:kklam@eecs.berkeley.edu">kklam@eecs.berkeley.edu</a>
 My name is  Ka-Kit Lam. </p>
 
-<p>Our paper is located at <a href="http://biorxiv.org/content/early/2014/11/03/010215">http://biorxiv.org/content/early/2014/11/03/010215</a></p>
+<p>Our paper on this tool is located at <a href="http://biorxiv.org/content/early/2014/11/03/010215">http://biorxiv.org/content/early/2014/11/03/010215</a></p>
 
 <h2>
 <a id="command-to-run-the-tool" class="anchor" href="#command-to-run-the-tool" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command to run the tool</h2>
@@ -81,7 +84,7 @@ My name is  Ka-Kit Lam. </p>
 
 <p>a)Fast mode [ -f True ] (e.g. for large and complex genomes , you may want to use this mode to get results faster; However, there will be a bit of computation vs quality trade-off if you want to use this mode; We suggest that you use this mode only when you got stuck in the standard mode): </p>
 
-<pre><code>python finisherSC.py destinedFolder mummerPath -f True 
+<pre><code>python finisherSC.py -f True destinedFolder mummerPath
 </code></pre>
 
 <p>[It means that you want to use the fast mode ]</p>
@@ -98,12 +101,12 @@ My name is  Ka-Kit Lam. </p>
 
 <p>d)Pick from previous jobs [-p pickupFilename] (e.g. you have got improved2.fasta but the cluster node timeout and you want to start from improved2.fasta instead of from scratch)</p>
 
-<pre><code>python finisherSC.py destinedFolder mummerPath  -p improved2.fasta
+<pre><code>python finisherSC.py -p improved2.fasta destinedFolder mummerPath  
 </code></pre>
 
 <p>e)Mapping between old contigs and new contigs [-o referenceName_QueryName ](e.g. you want to know how the contigs from contigs.fasta are mapped to improved3.fasta )</p>
 
-<pre><code>python finisherSC.py destinedFolder mummerPath -o contigs.fasta_improved3.fasta
+<pre><code>python finisherSC.py -o contigs.fasta_improved3.fasta destinedFolder mummerPath 
 </code></pre>
 
 <p>[It will then output the alignment of improved3.fasta against contigs.fasta. The output will be shown in the terminal and in mappingResults.txt at the destinedFolder]</p>
@@ -135,6 +138,8 @@ My name is  Ka-Kit Lam. </p>
 <li>C. elegans : <a href="https://github.com/PacificBiosciences/DevNet/wiki/C.-elegans-data-set">https://github.com/PacificBiosciences/DevNet/wiki/C.-elegans-data-set</a>
 </li>
 <li>E. coli, M. ruber and P. heparinus : <a href="http://files.pacb.com/software/hgap/index.html">http://files.pacb.com/software/hgap/index.html</a>
+</li>
+<li>Column (a,b) in the main table of the paper : <a href="http://www.eecs.berkeley.edu/%7Ekakitone/Ped30xData.zip">http://www.eecs.berkeley.edu/~kakitone/Ped30xData.zip</a> , <a href="http://www.eecs.berkeley.edu/%7Ekakitone/Ped50xData.zip">http://www.eecs.berkeley.edu/~kakitone/Ped50xData.zip</a>
 </li>
 </ol>
 
@@ -225,6 +230,13 @@ My name is  Ka-Kit Lam. </p>
 <blockquote>
 <p>There are various experimental functions there. The two important ones are tandem repeat resolver(tSolver.py) and approximate repeat phaser(xPhaser.py). </p>
 </blockquote>
+
+<h2>
+<a id="current-build-status" class="anchor" href="#current-build-status" aria-hidden="true"><span class="octicon octicon-link"></span></a>Current build status</h2>
+
+<p>It is an indicator on the current built powered by Travis-CI. If you issue a pull request, Travis-CI will evaluate your suggestion by automatically running the code on the default test case. </p>
+
+<p><img src="https://travis-ci.org/kakitone/finishingTool.svg?branch=master" alt="alt text" title="Current build status"></p>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/kakitone">kakitone</a></p>
