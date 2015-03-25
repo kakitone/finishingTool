@@ -172,6 +172,15 @@ My name is  Ka-Kit Lam. </p>
 <ol>
 <li>After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs( i.e. improved3.fasta )</li>
 <li>If you have problem running scipy.weave, try to remove ~/.python27_compiled </li>
+<li>
+<p>Sometimes, if the names of raw reads and contigs consists of special characters/formats, FinisherSC/MUMmer may not parse them correctly. In that case, you want to have a quick renaming of the names of contigs/reads in contigs.fasta or raw_reads.fasta using the following command. </p>
+
+<pre><code>perl -pe 's/&gt;[^\$]*$/"&gt;Seg" . ++$n ."\n"/ge' raw_reads.fasta &gt; newRaw_reads.fasta
+cp newRaw_reads.fasta raw_reads.fasta
+perl -pe 's/&gt;[^\$]*$/"&gt;Seg" . ++$n ."\n"/ge' contigs.fasta &gt; newContigs.fasta
+cp newContigs.fasta contigs.fasta
+</code></pre>
+</li>
 </ol>
 
 <h2>
