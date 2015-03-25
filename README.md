@@ -97,6 +97,13 @@ The data are supported by the original authors. But we provide an example on how
 ## Remarks ##
 1. After passing through the finishingTool, it is advised to use a polishing tool(e.g. Quiver) to polish the improved contigs( i.e. improved3.fasta )
 2. If you have problem running scipy.weave, try to remove ~/.python27_compiled 
+3. Sometimes, if the names of raw reads and contigs consists of special characters/formats, FinisherSC/MUMmer may not parse them correctly. In that case, you want to have a quick renaming of the names of contigs/reads in contigs.fasta or raw\_reads.fasta using the following command. 
+
+        perl -pe 's/>[^\$]*$/">Seg" . ++$n ."\n"/ge' raw_reads.fasta > newRaw_reads.fasta
+        cp newRaw_reads.fasta raw_reads.fasta
+        perl -pe 's/>[^\$]*$/">Seg" . ++$n ."\n"/ge' contigs.fasta > newContigs.fasta
+        cp newContigs.fasta contigs.fasta
+        
 
 ## Annotation of FinisherSC ##
 Main functional components of FinisherSC : 
