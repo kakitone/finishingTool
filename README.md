@@ -5,7 +5,9 @@ FinisherSC
 If you encounter any issue, please feel free to directly contact me at kklam@eecs.berkeley.edu
 My name is  Ka-Kit Lam. 
 
-Our paper on this tool is located at http://biorxiv.org/content/early/2014/11/03/010215
+Our paper on this tool is located at http://biorxiv.org/content/early/2015/04/04/010215
+
+Moreover, FinisherSC is under MIT License. 
 
 ## Command to run the tool ##
 
