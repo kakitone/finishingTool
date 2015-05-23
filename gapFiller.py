@@ -113,7 +113,7 @@ def formRelatedReadsFile(folderName, mummerLink):
     assoiatedReadIndex = []
     nameList = []
     
-    numberOfFiles = 20
+    numberOfFiles = max(20, houseKeeper.globalParallel)
     
     if True:
         bindir = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -261,7 +261,7 @@ def extractEdgeSet(folderName, mummerLink, option="nopolish"):
     IORobot.truncateEndOfContigs(folderName, "improved_Double.fasta", "smaller_improvedContig.fasta", 25000, lengthDic)
     dataSet = []
     
-    numberOfFiles = 20
+    numberOfFiles = max(20, houseKeeper.globalParallel)
     
 
     if True:
