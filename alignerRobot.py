@@ -4,6 +4,57 @@ import houseKeeper
 from multiprocessing import Pool
 import time
 
+def extractMumDataAndRemove(folderName, fileName,lenDic,thres):
+    
+    f = open(folderName + fileName, 'r')
+    removeList = []
+    
+    for i in range(6):
+        tmp = f.readline()
+
+    while len(tmp) > 0:
+        info = tmp.split('|')
+        filterArr = info[1].split()
+        rdGpArr = info[-1].split('\t')
+        firstArr = info[0].split()
+        
+        matchLenArr = info[2].split()
+    
+        matchLen1 = int(matchLenArr[0])
+        matchLen2 = int(matchLenArr[1])    
+        percentMatch = float(info[3])
+        
+        
+        helperStart, helperEnd = int(firstArr[0]), int(firstArr[1])
+        readStart, readEnd = int(filterArr[0]) , int(filterArr[1])
+        if readStart > readEnd:
+            readEnd = int(filterArr[0])
+            readStart = int(filterArr[1])
+        
+        helperName = rdGpArr[0].rstrip().lstrip()
+        readName = rdGpArr[1].rstrip().lstrip()
+        
+        
+        if helperName != readName:
+            l1, l2 = lenDic[helperName], lenDic[readName]
+            
+            if abs(l1 - matchLen1) < thres and abs(l2 - matchLen2) > thres:
+                removeList.append(helperName)
+            elif abs(l1 - matchLen1) > thres and abs(l2 - matchLen2) < thres:
+                removeList.append(readName)
+            elif abs(l1 - matchLen1) < thres and abs(l2 - matchLen2) < thres:
+                print "Both shortembedd " +" "+ str(helperStart)+" " + str(helperEnd)+" " + str(readStart)+" " + str(readEnd)+" "+ str(matchLen1)+" " + str(matchLen2)+" " + str(percentMatch)+" "+ str(helperName)+" "+ str(readName)
+        
+        
+        #dataList.append([helperStart, helperEnd , readStart, readEnd, matchLen1, matchLen2, percentMatch, helperName, readName ])
+    
+        tmp = f.readline().rstrip()
+                
+    f.close()
+    
+    return removeList
+
+
 def extractMumData(folderName, fileName):
     # "Format of the dataList :  1      765  |    11596    10822  |      765      775  |    84.25  | ref_NC_001133_       scf7180000000702"
     f = open(folderName + fileName, 'r')
