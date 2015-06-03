@@ -18,7 +18,8 @@ def obtainLength(folderName, fileName):
             if tmplen != 0:
                 lenDic[tmpName] = tmplen
                 tmplen = 0
-            tmpName = tmp[1:]
+            headerList = tmp.split();
+            tmpName = headerList[0][1:]
         else:
             tmplen += len(tmp)
         tmp = f.readline().rstrip()
@@ -29,6 +30,7 @@ def obtainLength(folderName, fileName):
     f.close()
     
     return lenDic
+    
     
 
 
