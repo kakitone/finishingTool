@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>FinisherSC by kakitone</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="javascripts/main.js"></script>
     <!--[if lt IE 9]>
@@ -63,6 +63,14 @@ My name is  Ka-Kit Lam. </p>
 <p>If you are running on server computer and would like to use multiple threads, then the following commands can generate 20 threads to run FinisherSC. </p>
 
 <pre><code>python finisherSC.py -par 20 destinedFolder mummerPath
+</code></pre>
+
+<p>Sometimes, if the names of raw reads and contigs consists of special characters/formats, FinisherSC/MUMmer may not parse them correctly. In that case, you want to have a quick renaming of the names of contigs/reads in contigs.fasta or raw_reads.fasta using the following command. </p>
+
+<pre><code>    perl -pe 's/&gt;[^\$]*$/"&gt;Seg" . ++$n ."\n"/ge' raw_reads.fasta &gt; newRaw_reads.fasta
+    cp newRaw_reads.fasta raw_reads.fasta
+    perl -pe 's/&gt;[^\$]*$/"&gt;Seg" . ++$n ."\n"/ge' contigs.fasta &gt; newContigs.fasta
+    cp newContigs.fasta contigs.fasta
 </code></pre>
 
 <h2>
