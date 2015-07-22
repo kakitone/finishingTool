@@ -18,6 +18,13 @@ Here is the command to run the tool:
 If you are running on server computer and would like to use multiple threads, then the following commands can generate 20 threads to run FinisherSC. 
 
 	python finisherSC.py -par 20 destinedFolder mummerPath
+	
+Sometimes, if the names of raw reads and contigs consists of special characters/formats, FinisherSC/MUMmer may not parse them correctly. In that case, you want to have a quick renaming of the names of contigs/reads in contigs.fasta or raw\_reads.fasta using the following command. 
+
+        perl -pe 's/>[^\$]*$/">Seg" . ++$n ."\n"/ge' raw_reads.fasta > newRaw_reads.fasta
+        cp newRaw_reads.fasta raw_reads.fasta
+        perl -pe 's/>[^\$]*$/">Seg" . ++$n ."\n"/ge' contigs.fasta > newContigs.fasta
+        cp newContigs.fasta contigs.fasta
 
 ## Input and output files ##
 
