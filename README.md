@@ -9,6 +9,10 @@ Our paper on this tool is located at http://biorxiv.org/content/early/2015/04/04
 
 Moreover, FinisherSC is under MIT License. 
 
+## News
+If you have a meta-genomics dataset, you may also want to visit our MetaFinisherSC https://github.com/kakitone/MetaFinisherSC
+
+
 ## Command to run the tool ##
 
 Here is the command to run the tool:
