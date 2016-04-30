@@ -5,15 +5,22 @@ import houseKeeper
 
 # ## 0) Preprocess by removing embedded contigs (I: contigs.fasta ; O : noEmbed.fasta)
 
+
+
 def removeEmbedded(folderName , mummerLink):
     print "removeEmbedded"
+    
     thres = 10
-    os.system("sed -e 's/|//g' " + folderName + "contigs.fasta  > " + folderName + "contigs2.fasta")
+    
+    command= r'''perl -pe 's/>[^\$]*$/">Seg" . ++$n ."\n"/ge' ''' + folderName + "raw_reads.fasta > " + folderName  + houseKeeper.globalReadName
+    os.system(command)
 
-    os.system("cp " + folderName + "contigs2.fasta " + folderName + "contigs.fasta") 
+    command= r'''perl -pe 's/>[^\$]*$/">Seg" . ++$n ."\n"/ge' ''' + folderName + "contigs.fasta > " + folderName  + houseKeeper.globalContigName
+    os.system(command)
+
 
     if True:
-        alignerRobot.useMummerAlignBatch(mummerLink, folderName, [["self", "contigs.fasta", "contigs.fasta", ""]], houseKeeper.globalParallel )
+        alignerRobot.useMummerAlignBatch(mummerLink, folderName, [["self", houseKeeper.globalContigName, houseKeeper.globalContigName, ""]], houseKeeper.globalParallel )
         # alignerRobot.useMummerAlign(mummerLink, folderName, "self", "contigs.fasta", "contigs.fasta")
         # outputName, referenceName, queryName, specialName
     
@@ -21,7 +28,7 @@ def removeEmbedded(folderName , mummerLink):
     
     dataList = alignerRobot.transformCoor(dataList)
     
-    lenDic = IORobot.obtainLength(folderName, 'contigs.fasta')
+    lenDic = IORobot.obtainLength(folderName, houseKeeper.globalContigName)
     
     removeList = []
     for eachitem in dataList:
@@ -50,5 +57,5 @@ def removeEmbedded(folderName , mummerLink):
             nameList.remove(eachitem)
     print len(nameList)
     
-    IORobot.putListToFileO(folderName, "contigs.fasta", "noEmbed", nameList)
+    IORobot.putListToFileO(folderName, houseKeeper.globalContigName, "noEmbed", nameList)
 

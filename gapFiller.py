@@ -16,12 +16,10 @@ def fillGap(folderName , mummerLink):
     # ## testing 
     
     formRelatedReadsFile(folderName, mummerLink)
-    os.system("cp raw_reads.part* "+ folderName)
-    os.system("rm raw_reads.part*")
+    os.system("mv "+ houseKeeper.globalReadName[0:-6] +".part* "+ folderName)
     
     extractEdgeSet(folderName, mummerLink)
-    os.system("cp relatedReads_Double.part* "+ folderName)
-    os.system("rm relatedReads_Double.part*")
+    os.system("mv relatedReads_Double.part* "+ folderName)
     
 def loadOpenList(folderName):
     
@@ -117,7 +115,7 @@ def formRelatedReadsFile(folderName, mummerLink):
     
     if True:
         bindir = os.path.abspath(os.path.dirname(sys.argv[0]))
-        command = bindir + "/fasta-splitter.pl --n-parts " + str(numberOfFiles) + " " + folderName + "raw_reads.fasta"
+        command = bindir + "/fasta-splitter.pl --n-parts " + str(numberOfFiles) + " " + folderName + houseKeeper.globalReadName
         os.system(command)
     
     
@@ -130,7 +128,7 @@ def formRelatedReadsFile(folderName, mummerLink):
         else:
             indexOfMum = str(dummyI)
             
-        outputName, referenceName, queryName, specialName=  "outGapFillRaw"+indexOfMum , "improvedTrunc.fasta", "raw_reads.part-" + indexOfMum + ".fasta", "fromMum" + indexOfMum 
+        outputName, referenceName, queryName, specialName=  "outGapFillRaw"+indexOfMum , "improvedTrunc.fasta", houseKeeper.globalReadName[0:-6] + ".part-" + indexOfMum + ".fasta", "fromMum" + indexOfMum 
         workerList.append([outputName, referenceName, queryName, specialName])
     
     
@@ -228,13 +226,12 @@ def formRelatedReadsFile(folderName, mummerLink):
     fout.close()   
     fFilter.close()
 
-    command = "perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' " + folderName + "associatedNames2.txt " + folderName + "raw_reads.fasta > " + folderName + "relatedReads.fasta"
+    command = "perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' " + folderName + "associatedNames2.txt " + folderName + houseKeeper.globalReadName +" > " + folderName + "relatedReads.fasta"
     os.system(command)
     
     IORobot.writeToFile_Double1(folderName, "relatedReads.fasta", "relatedReads_Double.fasta", "read")
     
 
-    
 def extractEdgeSet(folderName, mummerLink, option="nopolish"):
     # Tasks: reconstruct the string  graph
     

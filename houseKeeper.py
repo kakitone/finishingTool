@@ -4,6 +4,10 @@ import sys
 globalFast = False
 globalParallel = 1
 globalLarge = False
+globalContigName = "tmp_contigs.fasta"
+globalReadName = "tmp_rawreads.fasta"
+
+
 
 
 def quastEvaluate(folderName, quastLink, originalName, improvedNameList, referenceName):
