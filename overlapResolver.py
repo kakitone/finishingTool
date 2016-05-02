@@ -161,8 +161,7 @@ def formSeqGraph(folderName , mummerLink):
     outOpenList = "openZone.txt"
     
     IORobot.readContigOut(folderName, mummerLink, graphFileName, contigFile, outContigFile, outOpenList)
-   
-
+    
 # ## 3) X-phased seqGraph (I: startList, graphNodes; O: startList, graphNodes )
 
 

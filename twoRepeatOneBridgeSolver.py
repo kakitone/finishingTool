@@ -93,7 +93,6 @@ def xPhased(folderName , mummerLink):
     
     IORobot.readContigOut(folderName, mummerLink, graphFileName, contigFile, outContigFile, outOpenList)
     
-    
     # ## Repeat resolution  [Proxy for phasing step]
     # 6. Find out the repeat region by MSA
     # 7. Find out the location of SNPs and extend across repeat 

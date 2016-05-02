@@ -319,8 +319,7 @@ def extractEdgeSet(folderName, mummerLink, option="nopolish"):
     print "contigList", contigList
     
     writeContigReadCombine(blockedSet, dataSet, folderName, rawReadList, numberOfContig, contigList, leftConnect, option, rightConnect, mummerLink)
-
-
+    
 def formbestpair(bestMatchPair,numberOfContig):
     rawReadList = []
     

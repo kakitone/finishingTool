@@ -7,13 +7,13 @@ import overlapResolver
 import gapFiller
 import twoRepeatOneBridgeSolver
 import houseKeeper
+import IORobot
 
 ###################################################### Starting point
 def mainFlow(folderName , mummerLink, pickupname, mapcontigsname):      
     print "Go Bears! ! !" 
     
     print "pickupname, mapcontigsname", pickupname, mapcontigsname
-    
     
     if not pickupname in ["noEmbed.fasta", "improved.fasta", "improved2.fasta"]:
         nonRedundantResolver.removeEmbedded(folderName , mummerLink)
@@ -30,6 +30,12 @@ def mainFlow(folderName , mummerLink, pickupname, mapcontigsname):
     # ECReduction(folderName , mummerLink )
     # compareWithReference(folderName , mummerLink)
     
+    IORobot.fillInMissed(folderName, mummerLink, houseKeeper.globalContigName, "noEmbedtmp.fasta", "noEmbed.fasta")
+    IORobot.fillInMissed(folderName, mummerLink, houseKeeper.globalContigName, "improvedtmp.fasta", "improved.fasta")
+    IORobot.fillInMissed(folderName, mummerLink, houseKeeper.globalContigName, "improved2tmp.fasta", "improved2.fasta")
+    IORobot.fillInMissed(folderName, mummerLink, houseKeeper.globalContigName, "improved3tmp.fasta", "improved3.fasta")
+    
+
     if mapcontigsname != None:
         houseKeeper.performMapping(folderName, mummerLink, mapcontigsname)
         

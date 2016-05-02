@@ -20,7 +20,7 @@ def removeEmbedded(folderName , mummerLink):
 
 
     if True:
-        alignerRobot.useMummerAlignBatch(mummerLink, folderName, [["self", houseKeeper.globalContigName, houseKeeper.globalContigName, ""]], houseKeeper.globalParallel )
+        alignerRobot.useMummerAlignBatch(mummerLink, folderName, [["self", houseKeeper.globalContigName, houseKeeper.globalContigName, ""]], houseKeeper.globalParallel)
         # alignerRobot.useMummerAlign(mummerLink, folderName, "self", "contigs.fasta", "contigs.fasta")
         # outputName, referenceName, queryName, specialName
     
@@ -58,4 +58,4 @@ def removeEmbedded(folderName , mummerLink):
     print len(nameList)
     
     IORobot.putListToFileO(folderName, houseKeeper.globalContigName, "noEmbed", nameList)
-
+    

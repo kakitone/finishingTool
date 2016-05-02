@@ -24,7 +24,6 @@ def extractMumData(folderName, fileName):
         matchLen2 = int(matchLenArr[1])    
         percentMatch = float(info[3])
         
-        
         helperStart, helperEnd = int(firstArr[0]), int(firstArr[1])
         readStart, readEnd = int(filterArr[0]) , int(filterArr[1])
         

@@ -2,6 +2,8 @@ import os
 import houseKeeper
 import graphLib
 import alignerRobot
+from operator import itemgetter
+from itertools import groupby
 
 # ## 0) Preprocess by removing embedded contigs (I: contigs.fasta ; O : noEmbed.fasta)
 
@@ -29,8 +31,6 @@ def obtainLength(folderName, fileName):
     f.close()
     
     return lenDic
-    
-
 
 def findContigLength(folderName, option):
     
@@ -97,9 +97,6 @@ def findContigLength(folderName, option):
 
     return contigLength
 
-
-
-
 def putListToFileO(folderName, sourceFileName, targetFileName, myList):
     f = open(folderName + targetFileName + ".txt", 'w')
     for eachitem in myList:
@@ -109,9 +106,6 @@ def putListToFileO(folderName, sourceFileName, targetFileName, myList):
     
     command = "perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' " + folderName + targetFileName + ".txt " + folderName + sourceFileName + " > " + folderName + targetFileName + ".fasta"
     os.system(command)
-
-
-
 
 
 def writeToFile_Double1(folderName, fileName1, fileName2, option="contig"):
@@ -478,12 +472,7 @@ def obtainLinkInfoReadContig(dummyI, mummerLink, folderName,thres, lengthDic, K)
     
     return dataSet
 
-
-
 ### read from overlap
-
-
-
 
 def writeSegOut(ctgList, folderName, fileout):
     f = open(folderName + fileout, 'w')
@@ -614,3 +603,40 @@ def extractGraphToContigs(G, folderName, mummerLink, fileout, filein):
     
     writeSegOut(ctgList, folderName, fileout)
             
+def fillInMissed(folderName, mummerLink, filerefname, filequeryname, fileoutname):
+    
+    os.system("mv " + folderName + fileoutname + " " + folderName + filequeryname )
+    alignerRobot.useMummerAlignBatch(mummerLink, folderName, [[fileoutname+"fillmiss", filerefname, filequeryname, ""]], houseKeeper.globalParallel)
+    
+    dataList = alignerRobot.extractMumData(folderName, fileoutname+"fillmissOut")
+
+    lenDic = obtainLength(folderName, filerefname)
+
+    ### Check if there is any missing parts 
+
+    # Format of the dataList :  1      765  |    11596    10822  |      765      775  |    84.25  | ref_NC_001133_       scf7180000000702"
+    
+    dataList.sort(key = itemgetter(-2))
+    thres = 100
+    extraList = []
+
+    for key, items in groupby(dataList, itemgetter(-2)):
+        isFound = False
+        for eachitem in items:
+            if abs(int(eachitem[4])  - lenDic[key]) < thres:
+                isFound = True
+                break
+
+        if not isFound:
+            extraList.append(key)
+
+    ### Fill in any missing items
+    
+    referenceDic = loadContigsFromFile(folderName, filerefname)
+    queryDic = loadContigsFromFile(folderName, filequeryname)
+    
+    ctgList = [referenceDic[eachitem] for eachitem in extraList] + [queryDic[eachitem] for eachitem in queryDic]
+    writeSegOut(ctgList, folderName, fileoutname)
+
+    print "fileoutname: len(extraList)",fileoutname,  len(extraList), len(ctgList)
+

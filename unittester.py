@@ -10,7 +10,7 @@ class IsOddTests(unittest.TestCase):
         print "Init : Copying files : "
         
         self.testingFolder = "unitTestFolder"
-        self.mummerPath = "/Users/kakitlam/Desktop/experimentBench/MUMmer3.23/"
+        self.mummerPath = "/Users/kakitlam/Desktop/allinone/experimentBench/MUMmer3.23/"
         self.listOfFiles = ["raw_reads.fasta", "contigs.fasta"]
         os.system("rm -rf "+ self.testingFolder)
         
@@ -18,16 +18,16 @@ class IsOddTests(unittest.TestCase):
 
     def testFinisherSCMRubTest(self):
         print "Integration test on FinisherSC:  "
-        self.runningTestSet("/Users/kakitlam/Desktop/experimentBench/MRub/" , 1)
+        self.runningTestSet("/Users/kakitlam/Desktop/allinone/experimentBench/MRub/" , 1)
 
         
     def testFinisherSCPhTest(self):
         print "Integration test on FinisherSC:  "
-        self.runningTestSet("/Users/kakitlam/Desktop/experimentBench/Ph1/" , 5)
+        self.runningTestSet("/Users/kakitlam/Desktop/allinone/experimentBench/Ph1/" , 5)
         
     def testFinisherSCEcoliTest(self):
         print "Integration test on FinisherSC:  "
-        self.runningTestSet("/Users/kakitlam/Desktop/experimentBench/EcoliTestRun/" , 7)
+        self.runningTestSet("/Users/kakitlam/Desktop/allinone/experimentBench/EcoliTestRun/" , 7)
 
    
             
