@@ -45,7 +45,6 @@ def useMummerAlign(mummerLink, folderName, outputName, referenceName, queryName,
     showCoorMummer(specialForRaw, mummerLink, folderName, outputName, specialName)
     
     
-
 def nucmerMummer(specialForRaw, mummerLink, folderName, outputName, referenceName, queryName,refinedVersion):
     if not refinedVersion:
         if not specialForRaw:
@@ -105,23 +104,30 @@ def zeropadding(i):
     else:
         tmpi = str(i)
     return tmpi
-   
+
+def calculate(func, args):
+    func(*args)
+
+def calculatestar(args):
+    calculate(*args)
    
 def useMummerAlignBatch(mummerLink, folderName, workerList, nProc ,specialForRaw = False, refinedVersion = False):
     # Format for workerList : [[outputName, referenceName, queryName, specialName]... ]
     # nProc : a parameter on how many threads should be created each time
     # Goal : parallelize this part  
     if not houseKeeper.globalLarge:
+        print "nProc", nProc
         p = Pool(processes=nProc)
         results = []
         
         for eachitem in workerList:
             outputName, referenceName, queryName, specialName = eachitem
-            results.append(p.apply_async(useMummerAlign, args=(mummerLink, folderName, outputName, referenceName, queryName, specialForRaw , specialName, refinedVersion)))
-        
-        outputlist = [itemkk.get() for itemkk in results]
-        print  len(outputlist)
+            results.append((useMummerAlign, (mummerLink, folderName, outputName, referenceName, queryName, specialForRaw , specialName, refinedVersion)))
+        print len(results)
+        p.map_async(calculatestar, results, chunksize=max(1,len(results)/nProc))
         p.close()
+        p.join()
+   
     else:
         '''
         a) Split
@@ -161,12 +167,16 @@ def useMummerAlignBatch(mummerLink, folderName, workerList, nProc ,specialForRaw
                     else:
                         tmpRefName , tmpQryName = referenceName[0:-6] + ".part-" + zeropadding(i) +".fasta",  queryName[0:-6] + ".part-" + zeropadding(j) + ".fasta"
                     
-                    results.append(p.apply_async(nucmerMummer, args =(specialForRaw, mummerLink, "", folderName + outputName +zeropadding(i)+zeropadding(j), tmpRefName, tmpQryName, refinedVersion)))
-      
-        
-        outputlist = [itemkk.get() for itemkk in results]
-        print len(outputlist)
+                    #results.append(p.apply_async(nucmerMummer, args =(specialForRaw, mummerLink, "", folderName + outputName +zeropadding(i)+zeropadding(j), tmpRefName, tmpQryName, refinedVersion)))
+                    results.append((nucmerMummer, (specialForRaw, mummerLink, "", folderName + outputName +zeropadding(i)+zeropadding(j), tmpRefName, tmpQryName, refinedVersion)))
+
+        p.map_async(calculatestar, results,chunksize=max(1,len(results)/nProc))
         p.close()
+        p.join()
+
+        #outputlist = [itemkk.get() for itemkk in results]
+        #print len(outputlist)
+        #p.close()
         
         for eachitem in workerList:
             outputName, referenceName, queryName, specialName = eachitem           
