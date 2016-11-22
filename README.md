@@ -36,7 +36,7 @@ Note that it is assumed that you have "contigs.fasta" , "raw_reads.fasta" in the
 
 
 ## A sample test run ##
-Here is an example run with the pre-installed data files and softwares(e.g. Mummer, Gepard) [You may go to http://www.eecs.berkeley.edu/~kakitone/package.zip  to download the the whole package to have a quick test. But we note here that all data and softwares besides FinisherSC have their copyright belonging to their original authors. We provide the sandbox here for users' convenience only. Moreover, all the updates and versioning will be at GitHub page. Users are encouraged to git clone our project for later usage after they successfully go through the example run].
+Here is an example run with the pre-installed data files and softwares(e.g. Mummer, Gepard) [You may go to https://www.dropbox.com/sh/xjpt8xf5g1xf0ek/bGmZvt9Zfd  to download the the whole package to have a quick test. But we note here that all data and softwares besides FinisherSC have their copyright belonging to their original authors. We provide the sandbox here for users' convenience only. Moreover, all the updates and versioning will be at GitHub page. Users are encouraged to git clone our project for later usage after they successfully go through the example run].
 
 1. You may run the test cases as python finisherSC.py EcoliTestRun/ MUMmer3.23/
 2. After the processing, take the file whose name is **improved3.fasta** in destinedFolder and this is your output file.
