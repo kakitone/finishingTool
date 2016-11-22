@@ -5,7 +5,11 @@ FinisherSC
 If you encounter any issue, please feel free to directly contact me at kklam@eecs.berkeley.edu
 My name is  Ka-Kit Lam. 
 
-Our paper on this tool is located at http://biorxiv.org/content/early/2015/04/04/010215
+Our paper on this tool is published in
+
+Lam, K. K., LaButti, K., Khalak, A., & Tse, D. (2015). FinisherSC: a repeat-aware tool for upgrading de novo assembly using long reads. Bioinformatics, 31(19), 3207-3209.
+	
+https://doi.org/10.1093/bioinformatics/btv280
 
 Moreover, FinisherSC is under MIT License. 
 
